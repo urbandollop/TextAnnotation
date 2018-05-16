@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>登录</title>
+
+    <link th:href="@{~/css/bootstrap.min.css}" type="text/css" rel="stylesheet"/>
+    <link th:href="@{~/css/fixed-footer.css}" type="text/css" rel="stylesheet"/>
+
+    <script th:src="@{~/js/html5shiv.min.js}"></script>
+    <script th:src="@{~/js/respond.min.js}"></script>
+    <script th:src="@{~/js/jquery.js}"></script>
+    <script th:src="@{~/js/bootstrap.min.js}"></script>
+
+</head>
+<body>
+<div th:replace="common/nav :: nav"></div>
+<div class="container" style="text-align: center;">
+    <div style="padding-top: 13%">
+        <h1>文本标注系统<br></br>
+            <small>登录</small>
+        </h1>
+
+        <div style="margin-left: 30%;margin-right: 30%;padding-top: 3%">
+            <form role="form" th:action="@{/login}" action="/login" method="post">
+                <div class="form-group">
+                    <label for="inputUsername">用户名</label>
+                    <input type="text" class="form-control" id="inputUsername" name="username" placeholder="用户名"/>
+                </div>
+                <div class="form-group">
+                    <label for="inputPassword">密码</label>
+                    <input type="password" class="form-control" id="inputPassword" name="password" placeholder="密码"/>
+                </div>
+
+                <div class="alert alert-danger" role="alert" th:if="${param.error}">用户名或密码错误！请重试！
+                </div>
+
+                <button type="submit" class="btn btn-info" style="margin-top: 5%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;登录&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div th:replace="common/footer :: footer"></div>
+
+</body>
+</html>
