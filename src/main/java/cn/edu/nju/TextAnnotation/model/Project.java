@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "projects")
+@Table(name = "project")
 public class Project implements Serializable{
     @Id
     @GeneratedValue

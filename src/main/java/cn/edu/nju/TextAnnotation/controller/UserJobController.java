@@ -33,15 +33,16 @@ public class UserJobController {
     public ModelAndView showProjects(HttpSession session) {
         ModelAndView modelAndView = new ModelAndView("/user/projectList");
         User currentUser = userService.getCurrentUser();
-//        if (currentUser != null) {
-//            List<ProjectVO> allProjects = projectManagementService.userAllProjects(currentUser.getUser_id());
-//        }
-        List<ProjectVO> allProjects = new ArrayList<ProjectVO>() {
-            {
-                add(new ProjectVO(1, "name", LocalDateTime.now()));
-            }
-        };
-        modelAndView.addObject("allProjects", allProjects);
+        if (currentUser != null) {
+            List<ProjectVO> allProjects = projectManagementService.userAllProjects(currentUser.getUser_id());
+            modelAndView.addObject("allProjects", allProjects);
+        }
+//        List<ProjectVO> allProjects = new ArrayList<ProjectVO>() {
+//            {
+//                add(new ProjectVO(1, "name", LocalDateTime.now()));
+//            }
+//        };
+
         return modelAndView;
     }
 }

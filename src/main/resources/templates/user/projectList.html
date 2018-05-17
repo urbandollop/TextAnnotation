@@ -18,18 +18,18 @@
 <body>
 <div th:replace="common/nav :: nav"></div>
 <div class="container" style="text-align: center;">
-    <div >
+    <div>
         <h1>项目列表</h1>
 
         <div style="margin-left: 10%;margin-right: 10%;padding-top: 3%">
-            <table>
-                <thead>
+            <table style="width: 100%" border="1">
+                <thead style="font-size: 20px">
                 <tr>
-                    <th>项目名称</th>
-                    <th>项目创建时间</th>
+                    <th style="text-align: center">项目名称</th>
+                    <th style="text-align: center">项目创建时间</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody style="font-size: 17px">
                 <tr th:each="prod : ${allProjects}">
                     <td th:text="${prod.name}">name</td>
                     <td th:text="${prod.starttime}">time</td>
