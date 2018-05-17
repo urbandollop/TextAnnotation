@@ -26,16 +26,4 @@ public class SystemUserDetailsService implements UserDetailsService {
         }
         return user;
     }
-
-    public User getCurrentUser() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null) {
-            User user = (User) auth.getPrincipal();
-            Optional<User> opt = userRepository.findById(user.getUser_id());
-            if (opt.isPresent()) {
-                return opt.get();
-            }
-        }
-        return null;
-    }
 }

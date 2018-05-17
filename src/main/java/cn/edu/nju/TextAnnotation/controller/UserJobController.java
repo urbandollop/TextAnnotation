@@ -5,6 +5,7 @@ import cn.edu.nju.TextAnnotation.model.Project;
 import cn.edu.nju.TextAnnotation.model.User;
 import cn.edu.nju.TextAnnotation.security.SystemUserDetailsService;
 import cn.edu.nju.TextAnnotation.service.ProjectManagementService;
+import cn.edu.nju.TextAnnotation.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,13 +26,13 @@ public class UserJobController {
     @Autowired
     ProjectManagementService projectManagementService;
     @Autowired
-    SystemUserDetailsService userDetailsService;
+    UserService userService;
 
     //    @PreAuthorize("hasRole('user')")
     @GetMapping("/user/index")
     public ModelAndView showProjects(HttpSession session) {
         ModelAndView modelAndView = new ModelAndView("/user/projectList");
-        User currentUser = userDetailsService.getCurrentUser();
+        User currentUser = userService.getCurrentUser();
 //        if (currentUser != null) {
 //            List<ProjectVO> allProjects = projectManagementService.userAllProjects(currentUser.getUser_id());
 //        }
