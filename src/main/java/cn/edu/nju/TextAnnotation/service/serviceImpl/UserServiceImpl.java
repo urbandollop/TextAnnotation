@@ -1,4 +1,4 @@
-package cn.edu.nju.TextAnnotation.service.ServiceImpl;
+package cn.edu.nju.TextAnnotation.service.serviceImpl;
 
 import cn.edu.nju.TextAnnotation.model.User;
 import cn.edu.nju.TextAnnotation.repository.UserRepository;

@@ -1,9 +1,8 @@
-package cn.edu.nju.TextAnnotation.service.ServiceImpl;
+package cn.edu.nju.TextAnnotation.service.serviceImpl;
 
 import cn.edu.nju.TextAnnotation.bean.ProjectVO;
 import cn.edu.nju.TextAnnotation.model.Project;
 import cn.edu.nju.TextAnnotation.model.Task;
-import cn.edu.nju.TextAnnotation.model.User;
 import cn.edu.nju.TextAnnotation.repository.ProjectRepository;
 import cn.edu.nju.TextAnnotation.repository.UserRepository;
 import cn.edu.nju.TextAnnotation.service.ProjectManagementService;
