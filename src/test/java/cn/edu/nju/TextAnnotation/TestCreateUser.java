@@ -20,6 +20,11 @@ public class TestCreateUser extends TextAnnotationApplicationTests {
         Integer role = 1;
         User user = new User(username, encodePassword(password), role);
         userRepository.save(user);
+//        String username = "user";
+//        String password = "user";
+//        Integer role = 0;
+//        User user = new User(username, encodePassword(password), role);
+//        userRepository.save(user);
     }
 
     private String encodePassword(String password) {

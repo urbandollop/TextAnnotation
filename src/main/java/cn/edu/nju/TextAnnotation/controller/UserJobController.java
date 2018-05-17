@@ -1,0 +1,46 @@
+package cn.edu.nju.TextAnnotation.controller;
+
+import cn.edu.nju.TextAnnotation.bean.ProjectVO;
+import cn.edu.nju.TextAnnotation.model.Project;
+import cn.edu.nju.TextAnnotation.model.User;
+import cn.edu.nju.TextAnnotation.security.SystemUserDetailsService;
+import cn.edu.nju.TextAnnotation.service.ProjectManagementService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+@Controller
+public class UserJobController {
+    @Autowired
+    ProjectManagementService projectManagementService;
+    @Autowired
+    SystemUserDetailsService userDetailsService;
+
+    //    @PreAuthorize("hasRole('user')")
+    @GetMapping("/user/index")
+    public ModelAndView showProjects(HttpSession session) {
+        ModelAndView modelAndView = new ModelAndView("/user/projectList");
+        User currentUser = userDetailsService.getCurrentUser();
+//        if (currentUser != null) {
+//            List<ProjectVO> allProjects = projectManagementService.userAllProjects(currentUser.getUser_id());
+//        }
+        List<ProjectVO> allProjects = new ArrayList<ProjectVO>() {
+            {
+                add(new ProjectVO(1, "name", LocalDateTime.now()));
+            }
+        };
+        modelAndView.addObject("allProjects", allProjects);
+        return modelAndView;
+    }
+}
