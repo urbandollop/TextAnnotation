@@ -17,4 +17,7 @@ public class TaskManagementServiceImpl implements TaskManagementService {
     public List<Task> findTaskOfUser(int userid) {
         return taskRepository.findAllByUserid(userid);
     }
+
+    @Override
+    public Task findTaskOfUseridAndProjectid(int userid,int projectid){return taskRepository.findFirstByUseridAndProjectid(userid,projectid); }
 }

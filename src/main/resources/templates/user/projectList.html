@@ -31,7 +31,7 @@
                 </thead>
                 <tbody style="font-size: 17px">
                 <tr th:each="prod : ${allProjects}">
-                    <td th:text="${prod.name}">name</td>
+                    <td><a th:href="@{'/user/judgementList?pid='+${prod.project_id}+'&pname='+${prod.name}}" th:text="${prod.name}">name</a></td>
                     <td th:text="${prod.starttime}">time</td>
                 </tr>
                 </tbody>

@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface TaskManagementService {
     public List<Task> findTaskOfUser(int userid);
+
+    public Task findTaskOfUseridAndProjectid(int userid,int projectid);
 }
