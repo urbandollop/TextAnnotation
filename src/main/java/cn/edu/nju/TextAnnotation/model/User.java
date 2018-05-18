@@ -15,7 +15,7 @@ import java.util.List;
  * @author keenan on 2018/5/16
  */
 @Entity
-@Table(name = "users")
+@Table(name = "user")
 public class User implements UserDetails {
     @Id
     @GeneratedValue

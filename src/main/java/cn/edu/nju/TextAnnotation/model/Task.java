@@ -9,10 +9,10 @@ public class Task implements Serializable{
     @Id
     @GeneratedValue
     private Integer task_id;
-    @Column
+    @Column(name = "user_id")
     private Integer userid;
-    @Column
-    private Integer project_id;
+    @Column(name = "project_id")
+    private Integer projectid;
     @Column
     private Integer begin;
     @Column
@@ -28,11 +28,11 @@ public class Task implements Serializable{
     }
 
     public Integer getProject_id() {
-        return project_id;
+        return projectid;
     }
 
     public void setProject_id(Integer project_id) {
-        this.project_id = project_id;
+        this.projectid = project_id;
     }
 
     public Integer getBegin() {
