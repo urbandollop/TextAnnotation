@@ -31,7 +31,8 @@
                 </thead>
                 <tbody style="font-size: 17px">
                 <tr th:each="prod : ${allInstuments}">
-                    <td th:text="${prod.xml}">xml</td>
+                    <td>
+                        <a th:href="@{'/judge/judgeAnnotation?iid='+${prod.instrumentid}+'&xml='+${prod.xml}}" th:text="${prod.xml}">xml</a></td>
                     <td th:text="${prod.num}">num</td>
                 </tr>
                 </tbody>
