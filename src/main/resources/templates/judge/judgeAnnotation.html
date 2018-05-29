@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>文书标注页面</title>
+
+    <link th:href="@{~/css/style.css}" type="text/css" rel="stylesheet"/>
+</head>
+<body>
+<div>导航栏,username</div>
+<div>
+    <h1>文书名称</h1>
+    <div >
+        <form action="" method="post">
+            <table  th:each="factListBeans: ${factListBeans}">
+                <tr><td th:text="'事实'+${factListBeans.num}+'：'+${factListBeans.text}"> </td></tr>
+                <tr><td>
+                    <table id="customers" style="cursor:pointer">
+                        <tr>
+                            <td>是否相关</td>
+                            <td>法条名称</td>
+                            <td>法条内容</td>
+                        </tr>
+                        <tr th:each="statuteListBeans: ${statuteListBeans}">
+                            <td>
+                                <input type="radio" name="radio" value="1">相关
+                                <input checked type="radio" name="radio" value="0" >不相关
+                            </td>
+                            <td th:text="${statuteListBeans.name}" ></td>
+                            <td th:text="${statuteListBeans.text}"></td>
+                        </tr>
+                    </table>
+                </td></tr>
+            </table>
+            <input type="submit" name="submit" value="提交预览"/>
+        </form>
+    </div>
+</div>
+</body>
+</html>

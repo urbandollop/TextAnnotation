@@ -1,0 +1,208 @@
+@charset "utf-8";
+/* CSS Document */
+.main{
+	width:auto;
+	height:1080px;
+	border: 0px solid #73b4de;
+}
+.header{
+	border: 0px solid yellow;
+	width:atuo;
+	height:35px;
+}
+.header_left{
+	color:rgb(0,69,117);
+	font-size:20px;
+	font-weight:600;
+	width:40%;
+	padding-left:30px;
+	border: 0px solid #73b4de;
+	float:left;
+}
+.myDiv {
+	border-radius: 150px; /*杩欏彞灏辨槸閲嶇偣锛岃杈规鍙樹负鍦嗚*/
+	border: 1px solid #73b4de; /*璁╄竟妗嗗彉涓�1px瀹藉害锛岀洿绾匡紝#CCC棰滆壊*/
+	width: 230px;
+	height: 30px;
+	margin-left:200px;
+	float:left;
+}
+.myDiv img{
+	width:20px;
+	height:20px;
+	border: 0px solid #000;
+	padding-left:10px;
+	padding-top:5px;
+	float:left;
+}
+.header_right{
+	border: 0px solid #000;
+	width: 100px;
+	height: 30px;
+	margin-left:50px;
+	float:left;	
+}
+.header_right img{
+	margin-left:10px;
+	float:left;
+}
+.nav{
+	width:100%;
+	height:50px;
+	background-color:#2989cc;	
+}
+.nav li{ 
+	width:auto; 
+	border:0px solid #ffffff;
+	list-style-type:none;
+	margin-left:90px;
+	float:left;
+	}
+.nav li img{
+	width:25px;
+	height:25px;
+	border:0px solid #000;
+	padding-top:8px;
+}
+.nav li:hover{
+	background-color:#004575;
+}
+.nav li.alt p{
+	font-family:"寰蒋闆呴粦";
+	font-size:12px;	
+	color:rgb(238,238,238);
+	border:0px solid #750011;
+	padding-top:5px;
+}
+.nav li p{
+	font-family:"寰蒋闆呴粦";
+	font-size:12px;	
+	color:rgb(238,238,238);
+	border:0px solid #750011;
+	padding-top:5px;
+	float:right;
+}
+#main_left{
+	width:50%;
+	border:0px solid #000;
+	height:800px;
+	float:left;
+}
+.main_rignt{
+	/*border:0px solid #000;*/
+	float:left;
+	padding-top:50px;
+}
+#customers
+  {
+  font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
+  width:auto;
+  height:auto;
+  float:left;
+  border-collapse:collapse;
+  }
+
+#customers td, #customers th 
+  {
+  font-size:1em;
+  border:1px solid #ffffff;
+  padding:3px 7px 2px 7px;
+  }
+
+#customers th 
+  {
+  font-size:1.1em;
+  text-align:center;
+  padding-top:5px;
+  padding-bottom:4px;
+  background-color:#004575;
+  color:#ffffff;
+  }
+
+#customers tr
+  {
+  color:#333333;
+  background-color:#d4e7f5;
+  text-align:center;
+  }
+#customers tr:hover,#customers tr.hilite
+  {
+   background-color:#e4f3f0;
+   }
+.main_bottom{
+	float:left;
+	border:0px solid #750011;
+	margin-top:30px;
+}
+#main_bottom{
+  font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
+  background-color:#f3f3f3;
+  border:1px solid #000;
+  width:195px;
+  height:150px;
+  float:left;
+  margin-left:0px;
+}
+#main_bottom:hover{
+  cursor:hand;
+  background:#fff;
+}
+#main_bottom p{
+	text-align:center;
+}
+#main_bottom tr
+  {
+  font-size:1em;
+  border:1px solid #ffffff;
+  padding:3px 7px 2px 7px;
+  }
+#main_bottom tr.alt td
+  {
+  font-size:2em;
+  color:#fe0000;
+  border:0px solid #ffffff;
+  padding:3px 7px 2px 7px;
+  }
+#main_bottom img{
+  width:40px;
+  height:40px;
+  padding:3px 7px 2px 65px;
+}
+#main_bottom1{
+  font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
+  background-color:#f3f3f3;
+  border:1px solid #000;
+  width:195px;
+  height:150px;
+  float:left;
+  margin-left:10px;
+}
+#main_bottom1:hover{
+  cursor:hand;
+  background:#fff;
+  border:1px solid blue;
+}
+#main_bottom1 p{
+	text-align:center;
+}
+#main_bottom1 tr
+  {
+  font-size:1em;
+  border:1px solid #ffffff;
+  padding:3px 7px 2px 7px;
+  }
+#main_bottom1 tr.alt td
+  {
+  font-size:2em;
+  color:#fe0000;
+  border:0px solid #ffffff;
+  padding:3px 7px 2px 7px;
+  }
+#main_bottom1 img{
+  width:40px;
+  height:40px;
+  padding:3px 7px 2px 65px;
+}
+.clear{
+	clear:both;
+}
