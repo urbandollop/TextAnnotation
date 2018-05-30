@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface InstrumentAndStatueRepository extends JpaRepository<InstrumentAndStatute,String> {
     List<InstrumentAndStatute> findByInstrumentid(String instrumentid);
+
+    InstrumentAndStatute findFirstByInstrumentidAndStatuteid(String iid,String sid);
 }

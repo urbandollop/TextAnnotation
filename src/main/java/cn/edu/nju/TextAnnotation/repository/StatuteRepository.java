@@ -5,5 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface StatuteRepository extends JpaRepository<Statute,String> {
    Statute findByStatuteid(String statuteid);
+   Statute findFirstByName(String name);
 
 }

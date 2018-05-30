@@ -9,4 +9,6 @@ import java.util.List;
 public interface InstrumentRepository extends JpaRepository<Instrument, String> {
     //通过num来查询Instrument
     List<Instrument> findInstrumentsByNumBetween(Integer min, Integer max);
+
+    Instrument findFirstByInstrumentid(String id);
 }

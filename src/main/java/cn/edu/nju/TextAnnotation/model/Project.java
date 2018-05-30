@@ -15,6 +15,7 @@ public class Project implements Serializable{
     @Column
     private LocalDateTime starttime;
 
+    public Project(){}
 
     public Integer getProject_id() {
         return project_id;
