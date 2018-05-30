@@ -17,6 +17,8 @@ public class InstrumentAndStatute implements Serializable{
     @Column(name="num")
     private Integer num;
 
+    public InstrumentAndStatute(){}
+
     public String getInstrumentid() {
         return instrumentid;
     }

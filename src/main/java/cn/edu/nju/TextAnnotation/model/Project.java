@@ -21,6 +21,7 @@ public class Project implements Serializable{
      */
     private Boolean allocated;
 
+    public Project(){}
 
     public Integer getProject_id() {
         return project_id;
