@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>项目列表</title>
+
+    <link th:href="@{~/css/bootstrap.min.css}" type="text/css" rel="stylesheet"/>
+    <link th:href="@{~/css/fixed-footer.css}" type="text/css" rel="stylesheet"/>
+
+    <script th:src="@{~/js/html5shiv.min.js}"></script>
+    <script th:src="@{~/js/respond.min.js}"></script>
+    <script th:src="@{~/js/jquery.js}"></script>
+    <script th:src="@{~/js/bootstrap.min.js}"></script>
+
+</head>
+<body>
+<div th:replace="common/nav :: nav"></div>
+<div class="container" style="text-align: center;">
+    <div>
+        <h2>项目列表</h2>
+
+        <button class="btn-sm" style="margin-top: 1%" data-toggle="modal" data-target="#newProjectModal">创建新项目</button>
+
+        <div style="margin-left: 10%;margin-right: 10%;padding-top: 3%">
+            <table style="width: 100%" class="table">
+                <thead style="font-size: 20px">
+                <tr>
+                    <th style="text-align: center">项目名称</th>
+                    <th style="text-align: center">项目创建时间</th>
+                    <th style="text-align: center">
+                        任务分配
+                    </th>
+                </tr>
+                </thead>
+                <tbody style="font-size: 17px">
+                <tr th:each="prod : ${allProjects}">
+                    <td th:text="${prod.name}">name</a></td>
+                    <td th:text="${prod.starttime}">time</td>
+                    <td>
+                        <a class="btn-sm" th:href="@{'/'}" th:if="${prod.allocated}">查看任务分配</a>
+                        <a class="btn-sm btn-info" th:href="@{'/manager/allocate?projectId='+${prod.project_id}}" th:unless="${prod.allocated}">进行任务分配</a>
+                    </td>
+
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="newProjectModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                <h4 class="modal-title" id="newProjectModalLabel">创建新项目</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="project-name" class="control-label">项目名称:</label>
+                        <input type="text" class="form-control" id="project-name">
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary">创建</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="common/footer :: footer"></div>
+
+<script th:inline="javascript">
+
+</script>
+</body>
+</html>

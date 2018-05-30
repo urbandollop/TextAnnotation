@@ -14,6 +14,12 @@ public class Project implements Serializable{
     private String name;
     @Column
     private LocalDateTime starttime;
+    @Column
+    /**
+     * 是否已进行任务分配
+     * 已分配则为True
+     */
+    private Boolean allocated;
 
 
     public Integer getProject_id() {
@@ -38,5 +44,13 @@ public class Project implements Serializable{
 
     public void setStarttime(LocalDateTime starttime) {
         this.starttime = starttime;
+    }
+
+    public Boolean getAllocated() {
+        return allocated;
+    }
+
+    public void setAllocated(Boolean allocated) {
+        this.allocated = allocated;
     }
 }

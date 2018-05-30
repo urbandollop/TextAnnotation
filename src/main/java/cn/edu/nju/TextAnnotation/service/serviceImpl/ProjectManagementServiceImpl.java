@@ -37,4 +37,24 @@ public class ProjectManagementServiceImpl implements ProjectManagementService {
         }
         return projects;
     }
+
+    @Override
+    public List<ProjectVO> findAllProjects() {
+        List<Project> projects = projectRepository.findAll();
+        Collections.sort(projects, (o1, o2) -> o2.getStarttime().compareTo(o1.getStarttime()));
+        List<ProjectVO> projectVOS = new ArrayList<>();
+        projects.forEach(project -> projectVOS.add(ProjectVO.fromProject(project)));
+        return projectVOS;
+    }
+
+    @Override
+    public ProjectVO findProjectByProjectId(Integer projectId) {
+        Optional<Project> project = projectRepository.findById(projectId);
+        if (!project.isPresent()) {
+            return null;
+        } else {
+            return ProjectVO.fromProject(project.get());
+        }
+    }
+
 }

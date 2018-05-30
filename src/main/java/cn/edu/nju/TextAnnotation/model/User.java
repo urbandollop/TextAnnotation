@@ -29,6 +29,10 @@ public class User implements UserDetails {
      */
     private String password;
 
+    /**
+     * 0普通用户
+     * 1经理
+     */
     private Integer role;
 
     public User() {
