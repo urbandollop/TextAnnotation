@@ -4,6 +4,7 @@ import cn.edu.nju.TextAnnotation.bean.NewProjectBean;
 import cn.edu.nju.TextAnnotation.bean.ProjectVO;
 import cn.edu.nju.TextAnnotation.bean.ResultMessageBean;
 import cn.edu.nju.TextAnnotation.bean.TaskAllocationBean;
+import cn.edu.nju.TextAnnotation.model.Task;
 import cn.edu.nju.TextAnnotation.service.ProjectManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -52,7 +53,8 @@ public class ManagerController {
     }
 
     @PostMapping("/manager/allocate.action")
-    public @ResponseBody ResultMessageBean allocateTask(@RequestBody List<TaskAllocationBean> allocationBeans){
-        return null;
+    public @ResponseBody
+    ResultMessageBean allocateTask(@RequestBody List<TaskAllocationBean> allocationBeans) {
+        return projectManagementService.allocateTask(allocationBeans);
     }
 }

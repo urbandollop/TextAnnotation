@@ -30,4 +30,13 @@ public class JudgeResultServiceImpl implements JudgeResultService {
         }
         return userFinished;
     }
+
+    @Override
+    public boolean saveJudgement(Judgement j) {
+        if (j != null) {
+            judgementRepository.save(j);
+            return true;
+        }
+        return false;
+    }
 }

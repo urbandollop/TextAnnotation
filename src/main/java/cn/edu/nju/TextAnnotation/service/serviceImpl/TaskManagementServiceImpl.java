@@ -19,5 +19,13 @@ public class TaskManagementServiceImpl implements TaskManagementService {
     }
 
     @Override
-    public Task findTaskOfUseridAndProjectid(int userid,int projectid){return taskRepository.findFirstByUseridAndProjectid(userid,projectid); }
+    public Task findTaskOfUseridAndProjectid(int userid, int projectid) {
+        return taskRepository.findFirstByUseridAndProjectid(userid, projectid);
+    }
+
+    @Override
+    public boolean saveTask(Task t) {
+        taskRepository.save(t);
+        return true;
+    }
 }

@@ -3,6 +3,7 @@ package cn.edu.nju.TextAnnotation.service;
 import cn.edu.nju.TextAnnotation.bean.NewProjectBean;
 import cn.edu.nju.TextAnnotation.bean.ProjectVO;
 import cn.edu.nju.TextAnnotation.bean.ResultMessageBean;
+import cn.edu.nju.TextAnnotation.bean.TaskAllocationBean;
 import cn.edu.nju.TextAnnotation.model.Project;
 import org.springframework.stereotype.Service;
 
@@ -16,4 +17,6 @@ public interface ProjectManagementService {
     ProjectVO findProjectByProjectId(Integer projectId);;
 
     ResultMessageBean createProject(NewProjectBean newProjectBean);
+
+    ResultMessageBean allocateTask(List<TaskAllocationBean> allocationBeans);
 }
