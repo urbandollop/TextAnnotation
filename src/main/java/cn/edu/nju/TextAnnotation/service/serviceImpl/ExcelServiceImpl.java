@@ -1,24 +1,25 @@
 package cn.edu.nju.TextAnnotation.service.serviceImpl;
 
+
+import cn.edu.nju.TextAnnotation.bean.FactListBean;
 import cn.edu.nju.TextAnnotation.model.*;
 import cn.edu.nju.TextAnnotation.repository.*;
 import cn.edu.nju.TextAnnotation.service.ExcelService;
 import cn.edu.nju.TextAnnotation.util.ImportExcelUtil;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ClassUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 
 @Service
@@ -33,7 +34,8 @@ public class ExcelServiceImpl implements ExcelService {
     private InstrumentAndStatueRepository instrumentAndStatueRepository;
     @Autowired
     private FactRepository factRepository;
-
+    @Autowired
+    private JudgementRepository judgementRepository;
     /**
      * 上传excel文件到临时目录后并开始解析
      * @param fileName
@@ -268,4 +270,91 @@ public class ExcelServiceImpl implements ExcelService {
 
         return errorMsg;
     }
+
+
+    //导出excel部分
+    @Override
+    public List<FactListBean> getAllFromFactWhereStatuteId(String sid){
+        List<Judgement> judgements=judgementRepository.findAllByStatuteidAndIsrelated(sid,1);
+        List<FactListBean> factListBeans=new ArrayList<>();
+        for(int i =0;i<judgements.size();i++)
+        {
+            Judgement judgement = judgements.get(i);
+            Fact fact = factRepository.findFirstByFactid(judgement.getFactid());
+            factListBeans.add(new FactListBean(fact));
+        }
+        return factListBeans;
+    }
+
+    @Override
+    public void downloadExportExcel(HttpServletResponse response, String statuteName, List<FactListBean> data) throws Exception {
+        // 告诉浏览器用什么软件可以打开此文件
+        response.setHeader("content-Type", "application/vnd.ms-excel");
+        // 下载文件的默认名称
+        String fileName = "《"+ statuteName +"》相关联事实"+".xlsx";
+        response.setHeader("Content-Disposition", "attachment;filename="+ URLEncoder.encode(fileName, "utf-8"));
+        exportExcel(statuteName,data, response.getOutputStream());
+    }
+
+    private static void exportExcel(String sheetname,List<FactListBean> data, OutputStream out) throws Exception {
+
+        XSSFWorkbook wb = new XSSFWorkbook();
+        try {
+            String sheetName = sheetname;
+            if (null == sheetName) {
+                sheetName = "Sheet1";
+            }
+            XSSFSheet sheet = wb.createSheet(sheetName);
+            writeExcel( sheet, data);
+
+            wb.write(out);
+        } catch(Exception e){
+            e.printStackTrace();
+        }finally{
+            //此处需要关闭 wb 变量
+            out.close();
+        }
+    }
+
+    private static void writeExcel( Sheet sheet, List<FactListBean> factListBeans) {
+        // 产生表格标题行
+        String headers[]={"事实内容","事实所属文书","文书中顺序"};
+
+        Row row = sheet.createRow(0);
+        for (short i = 0; i < headers.length; i++) {
+            Cell cell = row.createCell(i);
+            XSSFRichTextString text = new XSSFRichTextString(headers[i]);
+            cell.setCellValue(text);
+        }
+
+        // 遍历集合数据，产生数据行
+        Iterator<FactListBean> it = factListBeans.iterator();
+        int index = 0;
+        while (it.hasNext()) {
+            index++;
+            row = sheet.createRow(index);
+            FactListBean factListBean = it.next();
+
+            Cell cell1 = row.createCell(0);
+            XSSFRichTextString id = new XSSFRichTextString(factListBean.getText()+"");
+            cell1.setCellValue(id);
+            Cell cell2 = row.createCell(1);
+            XSSFRichTextString num = new XSSFRichTextString(factListBean.getInstrumentid()+"");
+            cell2.setCellValue(num);
+            Cell cell3 = row.createCell(2);
+            XSSFRichTextString text = new XSSFRichTextString(factListBean.getNum()+"");
+            cell3.setCellValue(text);
+        }
+
+    }
+
+
+
+
+
+
+
+
+
+
 }

@@ -9,4 +9,6 @@ public interface FactRepository extends JpaRepository<Fact,Integer> {
     List<Fact> findByInstrumentid(String instrumnetid);
 
     Fact findFirstByInstrumentidAndNum(String iid,Integer num);
+
+    Fact findFirstByFactid(Integer factid);
 }

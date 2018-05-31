@@ -16,7 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 @Controller
-@RequestMapping("/excel/import")
+@RequestMapping("/import")
 public class UploadExcelController {
     @Autowired
     ExcelService excelService;
@@ -26,34 +26,6 @@ public class UploadExcelController {
         return "/excel/import";
     }
 
-    /**
-     * 描述：单个导入excel文件,
-     */
-//    @PostMapping(value = "/upload")
-//    public  String  uploadExcel(@RequestParam(value="filename") MultipartFile file,HttpSession session)  {
-//        //判断文件是否为空
-//        if(file==null){
-////            return "文件不能为空！";
-//         session.setAttribute("msg","文件不能为空！");
-//        }
-//
-//        //获取文件名
-//        String fileName=file.getOriginalFilename();
-//
-//        //验证文件名是否合格
-//        if(!ImportExcelUtil.validateExcel(fileName)){
-////            return "文件必须是excel格式！";
-//          session.setAttribute("msg","文件必须是excel格式！");
-//        }
-//
-//        //批量导入
-//        String message = excelService.batchImport(fileName,file);
-////        return message;
-//       session.setAttribute("msg",message);
-//
-//       return "/excel/import";
-//    }
-
     @PostMapping(value = "/upload")
     public  String  uploadExcel(HttpServletRequest request,HttpSession session)  {
         List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("filename");
@@ -62,25 +34,21 @@ public class UploadExcelController {
         for (int i = 0; i < files.size(); ++i) {
             file = files.get(i);
             //判断文件是否为空
-            if(file==null){
-                session.setAttribute("msg","文件不能为空！");
+            if (file == null) {
+                session.setAttribute("msg", "文件不能为空！");
             }
-
-            //获取文件名
-            String fileName=file.getOriginalFilename();
-
-            //验证文件名是否合格
-            if(!ImportExcelUtil.validateExcel(fileName)){
-                session.setAttribute("msg","文件必须是excel格式！");
+                //获取文件名
+                String fileName = file.getOriginalFilename();
+                //验证文件名是否合格
+                if (!ImportExcelUtil.validateExcel(fileName)) {
+                    session.setAttribute("msg", "文件必须是excel格式！");
+                    return "/excel/import";
+                }
+                    //批量导入
+                    message += excelService.batchImport(fileName, file);
+                    message += "——————";
+                    session.setAttribute("msg", message);
             }
-
-            //批量导入
-            message += excelService.batchImport(fileName,file);
-            message +="——————";
-            session.setAttribute("msg",message);
-        }
-
-
         return "/excel/import";
     }
 

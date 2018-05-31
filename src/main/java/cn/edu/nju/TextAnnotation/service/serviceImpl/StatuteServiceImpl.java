@@ -48,5 +48,22 @@ public class StatuteServiceImpl implements StatuteService {
         }
         return statuteListBeans;
     }
+    @Override
+    public List<StatuteListBean> getAllStatute(){
+        List<StatuteListBean> statuteListBeans = new ArrayList<>();
+        List<Statute> statutes = statuteRepository.findAll();
+        for(int i =0;i<statutes.size();i++)
+        {
+            StatuteListBean statuteListBean =new StatuteListBean(statutes.get(i)) ;
+            statuteListBeans.add(statuteListBean);
+        }
+        return statuteListBeans;
+    }
+    @Override
+    public StatuteListBean getOneById(String id){
+        Statute statute = statuteRepository.findByStatuteid(id);
+        StatuteListBean statuteListBean =new StatuteListBean(statute);
+        return  statuteListBean;
+    }
 
 }

@@ -3,7 +3,7 @@ package cn.edu.nju.TextAnnotation.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name="Fact")
+@Table(name="fact")
 public class Fact {
     @Id
     @Column(name="fact_id")

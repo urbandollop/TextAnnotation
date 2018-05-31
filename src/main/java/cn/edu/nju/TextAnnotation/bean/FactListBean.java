@@ -14,4 +14,35 @@ public class FactListBean {
         this.num=fact.getNum();
     }
 
+    public Integer getFactid() {
+        return factid;
+    }
+
+    public void setFactid(Integer factid) {
+        this.factid = factid;
+    }
+
+    public String getInstrumentid() {
+        return instrumentid;
+    }
+
+    public void setInstrumentid(String instrumentid) {
+        this.instrumentid = instrumentid;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public Integer getNum() {
+        return num;
+    }
+
+    public void setNum(Integer num) {
+        this.num = num;
+    }
 }
