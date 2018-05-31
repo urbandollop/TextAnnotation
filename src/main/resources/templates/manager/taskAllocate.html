@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>项目列表</title>
+
+    <link th:href="@{~/css/bootstrap.min.css}" type="text/css" rel="stylesheet"/>
+    <link th:href="@{~/css/fixed-footer.css}" type="text/css" rel="stylesheet"/>
+
+    <script th:src="@{~/js/html5shiv.min.js}"></script>
+    <script th:src="@{~/js/respond.min.js}"></script>
+    <script th:src="@{~/js/jquery.js}"></script>
+    <script th:src="@{~/js/bootstrap.min.js}"></script>
+
+</head>
+<body>
+<div th:replace="common/nav :: nav"></div>
+<div class="container" style="text-align: center;">
+    <div>
+        <h2>项目任务分配</h2>
+        <h4>项目名:&nbsp;&nbsp;<span th:text="${project.name}">任务名称</span></h4>
+        <h4>创建于:&nbsp;&nbsp;<span th:text="${project.starttime}">创建时间</span></h4>
+
+        <div style="margin-left: 10%;margin-right: 10%;padding-top: 3%">
+            <table style="width: 100%" class="table">
+                <thead style="font-size: 20px">
+                <tr>
+                    <th style="text-align: center">用户名</th>
+                    <th style="text-align: center">是否参与项目</th>
+                    <th style="text-align: center">
+                        分配计划
+                    </th>
+                </tr>
+                </thead>
+                <tbody style="font-size: 17px">
+                <tr>
+                    <td style="text-align: center">
+                        用户1111
+                    </td>
+                    <td style="text-align: center">
+                        <input type="checkbox" name="check" id="user1">
+                    </td>
+                    <td style="text-align: center">
+                        <div class="form-inline" id="tasks1" style="display: none">
+                            <input type="text" class="form-control" id="startUser1"
+                                   placeholder="start" style="width: 20%">
+                            &nbsp;~&nbsp;
+                            <input type="text" class="form-control" id="endUser1"
+                                   placeholder="end" style="width: 20%">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center">
+                        用户2222
+                    </td>
+                    <td style="text-align: center">
+                        <input type="checkbox" name="check" id="user2">
+                    </td>
+                    <td style="text-align: center">
+                        <div class="form-inline" style="display: none" id="tasks2">
+                            <input type="text" class="form-control" id="startUser2"
+                                   placeholder="start" style="width: 20%">
+                            &nbsp;~&nbsp;
+                            <input type="text" class="form-control" id="endUser2"
+                                   placeholder="end" style="width: 20%">
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div th:replace="common/footer :: footer"></div>
+
+<script th:inline="javascript">
+    $(function () {
+        var s = $("input[name='check']");
+        s.each(function (i) {
+            $(this).click(function () {
+                if (this.checked == true) {
+                    tasksId = "tasks" + this.id.split("user")[1]
+                    $("#" + tasksId).show()
+                } else if (this.checked == false) {
+                    tasksId = "tasks" + this.id.split("user")[1]
+                    startInputId = "startUser" + this.id.split("user")[1]
+                    endInputId = "endUser" + this.id.split("user")[1]
+                    $("#" + tasksId).hide()
+                    $("#"+startInputId).val("")
+                    $("#"+endInputId).val("")
+                }
+            });
+        });
+    })
+</script>
+</body>
+</html>

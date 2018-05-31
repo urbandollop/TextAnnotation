@@ -275,12 +275,12 @@ public class ExcelServiceImpl implements ExcelService {
     //导出excel部分
     @Override
     public List<FactListBean> getAllFromFactWhereStatuteId(String sid){
-        List<Judgement> judgements=judgementRepository.findAllByStatuteidAndIsrelated(sid,1);
+        List<Judgement> judgements=judgementRepository.findAllByStatuteIdAndIsrelated(sid,1);
         List<FactListBean> factListBeans=new ArrayList<>();
         for(int i =0;i<judgements.size();i++)
         {
             Judgement judgement = judgements.get(i);
-            Fact fact = factRepository.findFirstByFactid(judgement.getFactid());
+            Fact fact = factRepository.findFirstByFactid(judgement.getFactId());
             factListBeans.add(new FactListBean(fact));
         }
         return factListBeans;

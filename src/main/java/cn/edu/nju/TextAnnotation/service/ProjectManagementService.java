@@ -1,10 +1,21 @@
 package cn.edu.nju.TextAnnotation.service;
 
+import cn.edu.nju.TextAnnotation.bean.NewProjectBean;
 import cn.edu.nju.TextAnnotation.bean.ProjectVO;
+import cn.edu.nju.TextAnnotation.bean.ResultMessageBean;
+import cn.edu.nju.TextAnnotation.bean.TaskAllocationBean;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 public interface ProjectManagementService {
     public List<ProjectVO> userAllProjects(int userid);
+
+    List<ProjectVO> findAllProjects();
+
+    ProjectVO findProjectByProjectId(Integer projectId);;
+
+    ResultMessageBean createProject(NewProjectBean newProjectBean);
+
+    ResultMessageBean allocateTask(List<TaskAllocationBean> allocationBeans);
 }
