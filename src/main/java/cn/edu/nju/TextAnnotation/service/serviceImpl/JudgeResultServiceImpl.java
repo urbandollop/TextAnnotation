@@ -4,11 +4,13 @@ import cn.edu.nju.TextAnnotation.model.Judgement;
 import cn.edu.nju.TextAnnotation.repository.JudgementRepository;
 import cn.edu.nju.TextAnnotation.service.JudgeResultService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Service
 public class JudgeResultServiceImpl implements JudgeResultService {
     @Autowired
     private JudgementRepository judgementRepository;
