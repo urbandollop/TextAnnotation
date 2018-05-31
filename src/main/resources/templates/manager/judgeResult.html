@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>判断结果</title>
+    <link th:href="@{~/css/bootstrap.min.css}" type="text/css" rel="stylesheet"/>
+    <link th:href="@{~/css/fixed-footer.css}" type="text/css" rel="stylesheet"/>
+
+    <script th:src="@{~/js/html5shiv.min.js}"></script>
+    <script th:src="@{~/js/respond.min.js}"></script>
+    <script th:src="@{~/js/jquery.js}"></script>
+    <script th:src="@{~/js/bootstrap.min.js}"></script>
+</head>
+<body>
+<div th:replace="common/nav :: nav"></div>
+<div class="container" style="text-align: center;">
+    <div>
+        <h2>判断结果</h2>
+        <div style="margin-left: 10%;margin-right: 10%;padding-top: 3%">
+            <table style="width: 100%" class="table">
+                <thead style="font-size: 20px">
+                <tr>
+                    <th style="text-align: center">用户ID</th>
+                    <th style="text-align: center">是否判断结束</th>
+                </tr>
+                </thead>
+                <tbody style="font-size: 17px">
+                <tr th:each="each : ${judRes}">
+                    <td th:text="${each.key}">name</td>
+                    <td th:text="${each.value}?'是':'否'">result</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
