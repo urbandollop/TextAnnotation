@@ -1,12 +1,16 @@
 package cn.edu.nju.TextAnnotation.controller;
 
+import cn.edu.nju.TextAnnotation.bean.NewProjectBean;
 import cn.edu.nju.TextAnnotation.bean.ProjectVO;
+import cn.edu.nju.TextAnnotation.bean.ResultMessageBean;
+import cn.edu.nju.TextAnnotation.bean.TaskAllocationBean;
 import cn.edu.nju.TextAnnotation.service.ProjectManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
 
 /**
  * @author keenan on 2018/5/29
@@ -39,5 +43,16 @@ public class ManagerController {
             modelAndView.addObject("project", projectVO);
         }
         return modelAndView;
+    }
+
+    @PostMapping("/manager/createProject.action")
+    public @ResponseBody
+    ResultMessageBean createProject(@RequestBody NewProjectBean newProjectBean) {
+        return projectManagementService.createProject(newProjectBean);
+    }
+
+    @PostMapping("/manager/allocate.action")
+    public @ResponseBody ResultMessageBean allocateTask(@RequestBody List<TaskAllocationBean> allocationBeans){
+        return null;
     }
 }

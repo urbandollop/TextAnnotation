@@ -13,7 +13,7 @@
     <script th:src="@{~/js/respond.min.js}"></script>
     <script th:src="@{~/js/jquery.js}"></script>
     <script th:src="@{~/js/bootstrap.min.js}"></script>
-
+    <script th:src="@{~/js/toastr.min.js}"></script>
 </head>
 <body>
 <div th:replace="common/nav :: nav"></div>
@@ -40,7 +40,8 @@
                     <td th:text="${prod.starttime}">time</td>
                     <td>
                         <a class="btn-sm" th:href="@{'/'}" th:if="${prod.allocated}">查看任务分配</a>
-                        <a class="btn-sm btn-info" th:href="@{'/manager/allocate?projectId='+${prod.project_id}}" th:unless="${prod.allocated}">进行任务分配</a>
+                        <a class="btn-sm btn-info" th:href="@{'/manager/allocate?projectId='+${prod.project_id}}"
+                           th:unless="${prod.allocated}">进行任务分配</a>
                     </td>
 
                 </tr>
@@ -69,7 +70,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary">创建</button>
+                <button type="button" class="btn btn-primary" th:onclick="'javascript:createProject()'">创建</button>
             </div>
         </div>
     </div>
@@ -78,7 +79,25 @@
 <div th:replace="common/footer :: footer"></div>
 
 <script th:inline="javascript">
-
+    function createProject() {
+        $.ajax({
+            url: '/manager/createProject.action',
+            type: 'POST',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: JSON.stringify({
+                projectName: $('#project-name').val()
+            }),
+            success: function (data) {
+                if (data.resultCode === 'error') {
+                    toastr.warning(data.resultMessage)
+                    $('#project-name').val('')
+                }else {
+                    window.location.reload()
+                }
+            }
+        })
+    }
 </script>
 </body>
 </html>

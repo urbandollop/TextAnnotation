@@ -1,6 +1,8 @@
 package cn.edu.nju.TextAnnotation.service.serviceImpl;
 
+import cn.edu.nju.TextAnnotation.bean.NewProjectBean;
 import cn.edu.nju.TextAnnotation.bean.ProjectVO;
+import cn.edu.nju.TextAnnotation.bean.ResultMessageBean;
 import cn.edu.nju.TextAnnotation.model.Project;
 import cn.edu.nju.TextAnnotation.model.Task;
 import cn.edu.nju.TextAnnotation.repository.ProjectRepository;
@@ -10,6 +12,7 @@ import cn.edu.nju.TextAnnotation.service.TaskManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -57,4 +60,17 @@ public class ProjectManagementServiceImpl implements ProjectManagementService {
         }
     }
 
+    @Override
+    public ResultMessageBean createProject(NewProjectBean newProjectBean) {
+        try {
+            Project project = new Project();
+            project.setAllocated(false);
+            project.setName(newProjectBean.projectName);
+            project.setStarttime(LocalDateTime.now());
+            projectRepository.save(project);
+            return new ResultMessageBean(ResultMessageBean.SUCCESS);
+        } catch (Exception e) {
+            return new ResultMessageBean(ResultMessageBean.ERROR, "创建失败");
+        }
+    }
 }
