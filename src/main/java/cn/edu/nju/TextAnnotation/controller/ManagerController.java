@@ -51,7 +51,7 @@ public class ManagerController {
     @GetMapping("/manager/users")
     public ModelAndView getAllUsers() {
         // TODO 填上资源地址
-        ModelAndView modelAndView = new ModelAndView("");
+        ModelAndView modelAndView = new ModelAndView("/manager/users");
         modelAndView.addObject("users", userService.getAllNormalUsers());
         return modelAndView;
     }

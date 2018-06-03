@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>用户列表</title>
+
+    <link th:href="@{~/css/bootstrap.min.css}" type="text/css" rel="stylesheet"/>
+    <link th:href="@{~/css/fixed-footer.css}" type="text/css" rel="stylesheet"/>
+
+    <script th:src="@{~/js/html5shiv.min.js}"></script>
+    <script th:src="@{~/js/respond.min.js}"></script>
+    <script th:src="@{~/js/jquery.js}"></script>
+    <script th:src="@{~/js/bootstrap.min.js}"></script>
+    <script th:src="@{~/js/toastr.min.js}"></script>
+</head>
+<body>
+<div th:replace="common/nav :: nav"></div>
+<div class="container" style="text-align: center;">
+    <div>
+        <h2>用户列表</h2>
+
+        <button class="btn-sm" style="margin-top: 1%" data-toggle="modal" data-target="#newUserModal">创建新用户</button>
+
+        <div style="margin-left: 10%;margin-right: 10%;padding-top: 3%">
+            <table style="width: 100%" class="table">
+                <thead style="font-size: 20px">
+                <tr>
+                    <th style="text-align: center">用户id</th>
+                    <th style="text-align: center">用户名</th>
+                    <th style="text-align: center">
+                        用户密码
+                    </th>
+                </tr>
+                </thead>
+                <tbody style="font-size: 17px">
+                <tr th:each="prod : ${users}">
+                    <td th:text="${prod.userId}">id</a></td>
+                    <td th:text="${prod.username}">name</td>
+                    <td>********
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="newUserModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                <h4 class="modal-title" id="newUserModalLabel">添加新用户</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="user-name" class="control-label">用户名</label>
+                        <input type="text" class="form-control" id="user-name">
+                        <label for="user-passwd" class="control-label">用户密码</label>
+                        <input type="password" class="form-control" id="user-passwd">
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" th:onclick="'javascript:createUser()'">创建</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="common/footer :: footer"></div>
+
+<script th:inline="javascript">
+    function createUser() {
+        $.ajax({
+            url: '/manager/addUser.action',
+            type: 'POST',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: JSON.stringify({
+                username: $('#user-name').val(),
+                password: $('#user-passwd').val()
+            }),
+            success: function (data) {
+                if (data.resultCode === 'error') {
+                    toastr.warning(data.resultMessage)
+                    $('#user-name').val('')
+                    $('#user-passwd').val('')
+                } else {
+                    window.location.reload()
+                }
+            }
+        })
+    }
+</script>
+</body>
+</html>
