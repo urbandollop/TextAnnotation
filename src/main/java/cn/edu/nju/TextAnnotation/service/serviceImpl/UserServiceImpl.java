@@ -9,6 +9,7 @@ import cn.edu.nju.TextAnnotation.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -55,12 +56,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResultMessageBean signUp(NewUserBean newUserBean) {
         User user = userRepository.findUserByNameAndRole(newUserBean.username, 0);
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
         if (user != null) {
             return new ResultMessageBean(ResultMessageBean.ERROR, "用户名已被注册!");
         } else {
-            User newUser = new User(newUserBean.username, newUserBean.password, 0);
+            User newUser = new User(newUserBean.username, encoder.encode(newUserBean.password), 0);
             userRepository.save(newUser);
-            return new ResultMessageBean(ResultMessageBean.SUCCESS,"注册成功!");
+            return new ResultMessageBean(ResultMessageBean.SUCCESS, "注册成功!");
         }
     }
 }
