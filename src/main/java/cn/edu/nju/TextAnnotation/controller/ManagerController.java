@@ -6,6 +6,7 @@ import cn.edu.nju.TextAnnotation.bean.ResultMessageBean;
 import cn.edu.nju.TextAnnotation.bean.TaskAllocationBean;
 import cn.edu.nju.TextAnnotation.model.Task;
 import cn.edu.nju.TextAnnotation.service.ProjectManagementService;
+import cn.edu.nju.TextAnnotation.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,8 @@ import java.util.List;
 public class ManagerController {
     @Autowired
     private ProjectManagementService projectManagementService;
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/manager/index")
     public ModelAndView managerIndex() {
@@ -42,6 +45,7 @@ public class ManagerController {
             return null;
         } else {
             modelAndView.addObject("project", projectVO);
+            modelAndView.addObject("users", userService.getAllNormalUsers());
         }
         return modelAndView;
     }

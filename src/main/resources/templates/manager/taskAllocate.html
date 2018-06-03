@@ -13,7 +13,7 @@
     <script th:src="@{~/js/respond.min.js}"></script>
     <script th:src="@{~/js/jquery.js}"></script>
     <script th:src="@{~/js/bootstrap.min.js}"></script>
-
+    <script th:src="@{~/js/toastr.min.js}"></script>
 </head>
 <body>
 <div th:replace="common/nav :: nav"></div>
@@ -24,7 +24,7 @@
         <h4>创建于:&nbsp;&nbsp;<span th:text="${project.starttime}">创建时间</span></h4>
 
         <div style="margin-left: 10%;margin-right: 10%;padding-top: 3%">
-            <table style="width: 100%" class="table">
+            <table style="width: 100%" class="table" id="allocationTable">
                 <thead style="font-size: 20px">
                 <tr>
                     <th style="text-align: center">用户名</th>
@@ -35,44 +35,29 @@
                 </tr>
                 </thead>
                 <tbody style="font-size: 17px">
-                <tr>
-                    <td style="text-align: center">
+                <tr th:each="user:${users}">
+                    <td style="text-align: center" th:text="${user.username}">
                         用户1111
                     </td>
                     <td style="text-align: center">
-                        <input type="checkbox" name="check" id="user1">
+                        <input type="checkbox" name="check" th:id="'user'+${user.userId}">
                     </td>
                     <td style="text-align: center">
-                        <div class="form-inline" id="tasks1" style="display: none">
-                            <input type="text" class="form-control" id="startUser1"
+                        <div class="form-inline" th:id="'tasks'+${user.userId}" style="display: none">
+                            <input type="text" class="form-control" th:id="'startUser'+${user.userId}"
                                    placeholder="start" style="width: 20%">
                             &nbsp;~&nbsp;
-                            <input type="text" class="form-control" id="endUser1"
+                            <input type="text" class="form-control" th:id="'endUser'+${user.userId}"
                                    placeholder="end" style="width: 20%">
                         </div>
                     </td>
                 </tr>
-                <tr>
-                    <td style="text-align: center">
-                        用户2222
-                    </td>
-                    <td style="text-align: center">
-                        <input type="checkbox" name="check" id="user2">
-                    </td>
-                    <td style="text-align: center">
-                        <div class="form-inline" style="display: none" id="tasks2">
-                            <input type="text" class="form-control" id="startUser2"
-                                   placeholder="start" style="width: 20%">
-                            &nbsp;~&nbsp;
-                            <input type="text" class="form-control" id="endUser2"
-                                   placeholder="end" style="width: 20%">
-                        </div>
-                    </td>
-                </tr>
+
                 </tbody>
             </table>
         </div>
     </div>
+    <button class="btn-default" th:onclick="'javascript:submitAllocation('+${project.project_id}+')'">确认分配</button>
 </div>
 
 <div th:replace="common/footer :: footer"></div>
@@ -90,12 +75,43 @@
                     startInputId = "startUser" + this.id.split("user")[1]
                     endInputId = "endUser" + this.id.split("user")[1]
                     $("#" + tasksId).hide()
-                    $("#"+startInputId).val("")
-                    $("#"+endInputId).val("")
+                    $("#" + startInputId).val("")
+                    $("#" + endInputId).val("")
                 }
             });
         });
     })
+
+    function submitAllocation(projectId) {
+        var table = document.getElementById('allocationTable')
+        var infoList = new Array()
+
+        for (var i = 1; i < table.rows.length; i++) {
+            var check = table.rows[i].cells[1].getElementsByTagName('input')[0].checked
+            var start = table.rows[i].cells[2].getElementsByTagName('input')[0].value
+            var end = table.rows[i].cells[2].getElementsByTagName('input')[1].value
+            var userId = table.rows[i].cells[1].getElementsByTagName('input')[0].id.split('user')[1]
+
+            infoList.push({projectId: projectId, userId: userId, isAllocated: check, startNo: start, endNo: end})
+        }
+
+        $.ajax({
+            url:'/manager/allocate.action',
+            type: 'POST',
+            contentType: 'application/json',
+            dataType:'json',
+            data: JSON.stringify(infoList),
+            success: function (data) {
+                if(data.resultCode === 'error'){
+                    toastr.warning(data.resultMessage)
+                }else {
+                    window.location.href('/manager/index')
+                }
+            }
+        })
+    }
+
+
 </script>
 </body>
 </html>

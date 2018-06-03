@@ -8,19 +8,19 @@ import java.io.Serializable;
 public class Judgement implements Serializable {
     @Id
     @GeneratedValue
-    private int judgement_id;
+    private Integer judgement_id;
     @Column(name = "user_id")
-    private int userId;
+    private Integer userId;
     @Column(name = "fact_id")
-    private int factId;
+    private Integer factId;
     @Column(name = "statute_id")
     private String statuteId;
     @Column
-    private int isrelated;
+    private Integer isrelated;
     @Column(name = "project_id")
-    private int projectId;
+    private Integer projectId;
 
-    public int getJudgement_id() {
+    public Integer getJudgement_id() {
         return judgement_id;
     }
 
@@ -28,7 +28,7 @@ public class Judgement implements Serializable {
         this.judgement_id = judgement_id;
     }
 
-    public int getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
@@ -36,7 +36,7 @@ public class Judgement implements Serializable {
         this.userId = userId;
     }
 
-    public int getFactId() {
+    public Integer getFactId() {
         return factId;
     }
 
@@ -52,7 +52,7 @@ public class Judgement implements Serializable {
         this.statuteId = statuteId;
     }
 
-    public int getIsrelated() {
+    public Integer getIsrelated() {
         return isrelated;
     }
 
@@ -60,7 +60,7 @@ public class Judgement implements Serializable {
         this.isrelated = isrelated;
     }
 
-    public int getProjectId() {
+    public Integer getProjectId() {
         return projectId;
     }
 
