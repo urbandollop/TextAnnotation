@@ -1,5 +1,7 @@
 package cn.edu.nju.TextAnnotation.service.serviceImpl;
 
+import cn.edu.nju.TextAnnotation.bean.NewUserBean;
+import cn.edu.nju.TextAnnotation.bean.ResultMessageBean;
 import cn.edu.nju.TextAnnotation.bean.UserBean;
 import cn.edu.nju.TextAnnotation.model.User;
 import cn.edu.nju.TextAnnotation.repository.UserRepository;
@@ -39,8 +41,26 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserBean> getAllNormalUsers() {
         List<User> users = userRepository.findUsersByRole(0);
-        List<UserBean> userBeans=new ArrayList<>();
+        List<UserBean> userBeans = new ArrayList<>();
         users.forEach(user -> userBeans.add(new UserBean(user)));
         return userBeans;
+    }
+
+    /**
+     * 用户注册
+     *
+     * @param newUserBean
+     * @return
+     */
+    @Override
+    public ResultMessageBean signUp(NewUserBean newUserBean) {
+        User user = userRepository.findUserByNameAndRole(newUserBean.username, 0);
+        if (user != null) {
+            return new ResultMessageBean(ResultMessageBean.ERROR, "用户名已被注册!");
+        } else {
+            User newUser = new User(newUserBean.username, newUserBean.password, 0);
+            userRepository.save(newUser);
+            return new ResultMessageBean(ResultMessageBean.SUCCESS,"注册成功!");
+        }
     }
 }

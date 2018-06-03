@@ -1,12 +1,10 @@
 package cn.edu.nju.TextAnnotation.controller;
 
-import cn.edu.nju.TextAnnotation.bean.NewProjectBean;
-import cn.edu.nju.TextAnnotation.bean.ProjectVO;
-import cn.edu.nju.TextAnnotation.bean.ResultMessageBean;
-import cn.edu.nju.TextAnnotation.bean.TaskAllocationBean;
+import cn.edu.nju.TextAnnotation.bean.*;
 import cn.edu.nju.TextAnnotation.model.Task;
 import cn.edu.nju.TextAnnotation.service.ProjectManagementService;
 import cn.edu.nju.TextAnnotation.service.UserService;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -50,6 +48,20 @@ public class ManagerController {
         return modelAndView;
     }
 
+    @GetMapping("/manager/users")
+    public ModelAndView getAllUsers() {
+        // TODO 填上资源地址
+        ModelAndView modelAndView = new ModelAndView("");
+        modelAndView.addObject("users", userService.getAllNormalUsers());
+        return modelAndView;
+    }
+
+    @PostMapping("/manager/addUser.action")
+    public @ResponseBody
+    ResultMessageBean addUser(@RequestBody NewUserBean newUserBean) {
+        return userService.signUp(newUserBean);
+    }
+
     @PostMapping("/manager/createProject.action")
     public @ResponseBody
     ResultMessageBean createProject(@RequestBody NewProjectBean newProjectBean) {
@@ -61,4 +73,5 @@ public class ManagerController {
     ResultMessageBean allocateTask(@RequestBody List<TaskAllocationBean> allocationBeans) {
         return projectManagementService.allocateTask(allocationBeans);
     }
+
 }
