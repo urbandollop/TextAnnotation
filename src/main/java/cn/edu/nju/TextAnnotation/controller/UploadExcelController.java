@@ -26,29 +26,33 @@ public class UploadExcelController {
         return "/excel/import";
     }
 
-    @PostMapping(value = "/upload")
+    @PostMapping(value = "/upload.action")
     public  String  uploadExcel(HttpServletRequest request,HttpSession session)  {
-        List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("filename");
         MultipartFile file = null;
         String message = "";
-        for (int i = 0; i < files.size(); ++i) {
-            file = files.get(i);
-            //判断文件是否为空
-            if (file == null) {
-                session.setAttribute("msg", "文件不能为空！");
-            }
-                //获取文件名
-                String fileName = file.getOriginalFilename();
-                //验证文件名是否合格
-                if (!ImportExcelUtil.validateExcel(fileName)) {
-                    session.setAttribute("msg", "文件必须是excel格式！");
-                    return "/excel/import";
+        List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("filename");
+
+            for (int i = 0; i < files.size(); ++i) {
+                file = files.get(i);
+                //判断文件是否为空
+                if (file.getOriginalFilename() == null) {
+                    session.setAttribute("msg", "文件不能为空！");
+                } else {
+                    //获取文件名
+                    String fileName = file.getOriginalFilename();
+                    //验证文件名是否合格
+                    if (!ImportExcelUtil.validateExcel(fileName)) {
+                        session.setAttribute("msg", "文件必须是excel格式！");
+                    } else {
+                        //批量导入
+                        message += excelService.batchImport(fileName, file);
+                        message += ",第"+ (i+1) +"个文件存储完毕!————";
+                        session.setAttribute("msg", message);
+                    }
                 }
-                    //批量导入
-                    message += excelService.batchImport(fileName, file);
-                    message += "——————";
-                    session.setAttribute("msg", message);
             }
+
+
         return "/excel/import";
     }
 

@@ -48,6 +48,7 @@
                         <li th:if="${#httpServletRequest.remoteUser}"><a th:href="@{/logout}">注销</a></li>
                         <li th:if="${'admin'.equals(#httpServletRequest.remoteUser)}"><a th:href="@{/manager/users}">查看用户</a></li>
                         <li th:if="${'admin'.equals(#httpServletRequest.remoteUser)}"><a th:href="@{/manager/index}">查看项目</a></li>
+                        <li th:if="${'admin'.equals(#httpServletRequest.remoteUser)}"><a th:href="@{/import}">导入excel</a></li>
                     </ul>
                 </li>
             </ul>

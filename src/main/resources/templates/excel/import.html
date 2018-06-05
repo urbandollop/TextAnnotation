@@ -27,12 +27,14 @@
                 <tr>
                     <th style="text-align: center">
                         <div style="margin: 0 auto;">
-                        <form class="form-horizontal" id="form_table" action="#" th:action="@{/excel/import/upload}" enctype="multipart/form-data" method="post">
+                        <!--<form class="form-horizontal" id="uploadForm" enctype="multipart/form-data">-->
+                        <form class="form-horizontal" id="uploadForm" enctype="multipart/form-data" action="#" th:action="@{/import/upload.action}" method="post">
                         <input class="form-input" type="file" name="filename" multiple="multiple"></input>
                         <br/>
-                        <button type="submit" class="btn">开始导入</button>
+                            <button type="submit" class="btn btn-primary">开始导入</button>
+                        <!--<button type="button" class="btn btn-primary" th:onclick="'javascript:startImport()'">开始导入</button>-->
                         </form>
-                        <div class="alert alert-danger" role="alert" th:text="${session.msg}">导入信息
+                        <div id="message" class="alert alert-danger" role="alert" th:text="${session.msg}">导入信息
                         </div>
                         </div>
                     </th>
@@ -46,5 +48,7 @@
 </div>
 
 <div th:replace="common/footer :: footer"></div>
+
+
 </body>
 </html>
