@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>用户个人信息</title>
+
+    <link th:href="@{~/css/bootstrap.min.css}" type="text/css" rel="stylesheet"/>
+    <link th:href="@{~/css/fixed-footer.css}" type="text/css" rel="stylesheet"/>
+
+    <script th:src="@{~/js/html5shiv.min.js}"></script>
+    <script th:src="@{~/js/respond.min.js}"></script>
+    <script th:src="@{~/js/jquery.js}"></script>
+    <script th:src="@{~/js/bootstrap.min.js}"></script>
+</head>
+<body>
+<div th:replace="common/nav :: nav"></div>
+<div style="width: 40%;margin:auto;">
+    <h1 style="text-align: center">个人信息</h1>
+    <hr>
+    <div style="font-size: 20px">
+        <p><span style="width: 30%;display: inline-block;">用户名:</span>
+            <span th:text="${profile.username}"></span></p>
+        <p><span style="width: 30%;display: inline-block;">密码:</span> ******</p>
+    </div>
+    <div style="height: 40px"></div>
+    <h3>修改密码</h3>
+    <hr>
+    <div style="font-size: 20px;">
+        <p><span style="width: 30%;display: inline-block;">输入旧密码:</span>
+            <input type="password" id="old-passwd"></p>
+        <p><span style="width: 30%;display: inline-block;">输入新密码:</span>
+            <input type="password" id="new-passwd"></p>
+        <p>
+            <button class="btn btn-primary" onclick="changePasswd()">确认修改</button>
+        </p>
+    </div>
+
+</div>
+</body>
+<script type="text/javascript">
+    function changePasswd() {
+        var oldpw = $('#old-passwd').val()
+        var newpw = $('#new-passwd').val()
+        if ('' === oldpw || '' === newpw) {
+            alert("请输入旧密码和新密码！")
+        } else {
+            $.post('/user/modify?oldpass=' + oldpw + '&newpass=' + newpw, function (data) {
+                alert(data.resultMessage)
+                window.location.reload()
+            });
+        }
+    }
+</script>
+</html>
