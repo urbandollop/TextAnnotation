@@ -14,4 +14,6 @@ public interface JudgementRepository extends JpaRepository<Judgement,Integer> {
 
     @Query(value = "select new cn.edu.nju.TextAnnotation.bean.JudgementDto(count(j.statuteId),j.statuteId) from Judgement j where j.projectId = :projectid and j.isrelated = :isrelated group by j.statuteId order by count(j.statuteId) desc ")
     List<JudgementDto> findJudgementDto(@Param("projectid") Integer projectid,@Param("isrelated") Integer isrelated);
+
+    Judgement findFirstByUserIdAndFactIdAndStatuteIdAndProjectId(Integer userid,Integer factid,String statuteid,Integer projectid);
 }
