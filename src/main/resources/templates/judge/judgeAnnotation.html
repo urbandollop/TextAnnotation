@@ -20,10 +20,14 @@
 <div class="container" style="text-align: center;">
     <div th:with="xml=${#httpServletRequest.getParameter('xml')}">
         <h1 th:text="${xml}">文书名称</h1>
-        <div >
-            <form >
+        <div  th:with="pid=${#httpServletRequest.getParameter('pid')}">
+         <label id="pidlabel" style="display: none" th:text="${pid}"></label>
+
                 <table  th:each="factListBeans: ${listBean.list}" id="annotationtable" border="0" >
-                    <tr><br/><td  style="font-size: 17px" th:text="'事实'+${factListBeans.num}+'：'+${factListBeans.text}" th:id="'factBean'+${factListBeans.factid}"> </td><br/></tr>
+                    <tr>
+                        <td  style="font-size: 17px" th:text="'事实'+${factListBeans.num}+'：'+${factListBeans.text}" th:id="'factBean'+${factListBeans.factid}">
+                    </td>
+                    </tr>
                     <tr>
                         <td>
                             <table border="1" th:id="'statutetable'+${factListBeans.factid}">
@@ -48,9 +52,9 @@
                         </td>
                     </tr>
                 </table>
-                    <button    class="btn-default"  th:onclick="'javascript:annotationSubmit()'">提交预览
+                    <button   class="btn-default"  th:onclick="'javascript:annotationSubmit()'">提交预览
                     </button>
-            </form>
+
         </div>
     </div>
 </div>
@@ -63,13 +67,18 @@
   function annotationSubmit() {
       var table=document.getElementById('annotationtable')
       var judgementList=new Array()
+      var pidlabel = document.getElementById('pidlabel')
+      var pidtext = pidlabel.innerText
       for(var i=1;i<table.rows.length;i++){
-          var userid=0
-          var factid=table.rows[i-1].cells[0].id.split('factBean')
-          var isrelated=table.rows[i].cells[0].getElementsByTagName('input').checked.value()
-          var statuteid=table.rows[i].cells[0].getElementsByTagName('input').checked.id.spilt('statutename')
-          var projectid=9
-          judgementList.push({userid:userid, factid:factid,isrelated:isrelated,factid:factid,statuteid:statuteid,projectid:projectid})
+
+//          var factid=table.rows[i-1].cells[0].id.split('factBean')
+          var factid =16608
+//          var isrelated=table.rows[i].cells[0].getElementsByTagName('input').checked.value()
+          var isrelated=0
+//          var statuteid=table.rows[i].cells[0].getElementsByTagName('input').checked.id.spilt('statutename')
+          var statuteid='L1.1.250.133-00'
+          var projectid=parseInt(pidtext)
+          judgementList.push({ factid:factid,isrelated:isrelated,factid:factid,statuteid:statuteid,projectid:projectid})
       }
       $.ajax({
           url:'/judge/annotationSubmit.action',
