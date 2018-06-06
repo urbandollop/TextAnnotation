@@ -37,7 +37,6 @@ public class StatuteServiceImpl implements StatuteService {
         List<InstrumentAndStatute> instrumentAndStatutes=instrumentAndStatueRepository.findByInstrumentid(instrumentid);
         for(int j=0;j<instrumentAndStatutes.size();j++){
             InstrumentAndStatute instrumentAndStatute= instrumentAndStatutes.get(j);
-            System.out.println(" "+instrumentAndStatute.toString());
         }
         List<StatuteListBean> statuteListBeans=new ArrayList<>();
         for (int i=0;i<instrumentAndStatutes.size();i++){

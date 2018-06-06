@@ -7,46 +7,55 @@
     <title>文书标注页面</title>
     <link th:href="@{~/css/bootstrap.min.css}" type="text/css" rel="stylesheet"/>
     <link th:href="@{~/css/fixed-footer.css}" type="text/css" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{~/css/toastr.css}"/>
 
     <script th:src="@{~/js/html5shiv.min.js}"></script>
     <script th:src="@{~/js/respond.min.js}"></script>
     <script th:src="@{~/js/jquery.js}"></script>
     <script th:src="@{~/js/bootstrap.min.js}"></script>
-
+    <script th:src="@{~/js/toastr.min.js}"></script>
     <!--<link th:href="@{~/css/style.css}" type="text/css" rel="stylesheet"/>-->
 </head>
 <body>
 <div th:replace="common/nav :: nav"></div>
 <div class="container" style="text-align: center;">
-<div th:with="xml=${#httpServletRequest.getParameter('xml')}">
-    <h1 th:text="${xml}">文书名称</h1>
-    <div >
-        <form action="" method="post">
-            <table  th:each="factListBeans: ${factListBeans}">
-                <tr><td th:text="'事实'+${factListBeans.num}+'：'+${factListBeans.text}"> </td></tr>
-                <tr><td>
-                    <table id="customers" style="cursor:pointer">
-                        <tr>
-                            <td>是否相关</td>
-                            <td>法条名称</td>
-                            <td>法条内容</td>
-                        </tr>
-                        <tr th:each="statuteListBeans: ${statuteListBeans}">
-                            <td>
-                                <input type="radio" name="radio" value="1">相关
-                                <input checked type="radio" name="radio" value="0" >不相关
-                            </td>
-                            <td th:text="${statuteListBeans.name}" ></td>
-                            <td th:text="${statuteListBeans.text}"></td>
-                        </tr>
-                    </table>
-                </td></tr>
-            </table>
-            <input type="submit" name="submit" value="提交预览"/>
-        </form>
+    <div th:with="xml=${#httpServletRequest.getParameter('xml')}">
+        <h1 th:text="${xml}">文书名称</h1>
+        <div >
+            <form th:action="@{/annotationSubmit}" method="post">
+                <table  th:each="factListBeans: ${factListBeans}" border="0">
+                    <tr><br/><td  style="font-size: 17px" th:text="'事实'+${factListBeans.num}+'：'+${factListBeans.text}"> </td><br/></tr>
+
+                    <tr><td>
+                        <table  style="cursor:pointer" border="1">
+                            <thead style="font-size: 20px">
+                            <tr>
+                                <td>是否相关</td>
+                                <td>法条名称</td>
+                                <td>法条内容</td>
+                            </tr>
+                            </thead>
+                            <tbody style="font-size: 17px">
+                            <tr th:each="statuteListBeans: ${statuteListBeans}">
+                                <td style="width: 20%;">
+                                    <input type='checkbox' name='VoteOption1' value=0>相关<br>
+                                    <input type='checkbox' name='VoteOption1' value=1>不相关<br>
+                                </td>
+                                <td style="width: 30%;" th:text="${statuteListBeans.name}" ></td>
+                                <td th:text="${statuteListBeans.text}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td></tr>
+                </table>
+                <button type="submit" class="btn btn-info" style="margin-right: 2%">提交预览
+                </button>
+            </form>
+        </div>
     </div>
 </div>
-</div>
-<div th:replace="common/footer :: footer"></div>
+<footer class="panel-footer">
+    <div th:replace="common/footer :: footer"></div>
+</footer>
 </body>
 </html>

@@ -2,11 +2,16 @@ package cn.edu.nju.TextAnnotation.bean;
 
 import cn.edu.nju.TextAnnotation.model.Fact;
 
+import java.util.List;
+
 public class FactListBean {
     public  Integer factid;
     public  String instrumentid;
     public  String text;
     public  Integer num;
+    List<FactListBean> factListBeanList;
+    public FactListBean(){
+    }
     public FactListBean(Fact fact){
         this.factid=fact.getFactid();
         this.instrumentid=fact.getInstrumentid().toString();
@@ -44,5 +49,12 @@ public class FactListBean {
 
     public void setNum(Integer num) {
         this.num = num;
+    }
+
+    public List<FactListBean> getFactListBeanList() {
+        return factListBeanList;
+    }
+    public void setFactListBeanList(List<FactListBean> factListBeanList) {
+        this.factListBeanList = factListBeanList;
     }
 }
