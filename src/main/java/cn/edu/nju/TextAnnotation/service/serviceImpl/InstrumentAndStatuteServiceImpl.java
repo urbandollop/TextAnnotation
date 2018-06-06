@@ -14,7 +14,6 @@ public class InstrumentAndStatuteServiceImpl implements InstrumentAndStatuteServ
     private InstrumentAndStatueRepository instrumentAndStatueRepository;
 
     public List<InstrumentAndStatute> getInstrumentAndStatute(String instrumentid){
-        instrumentid="006_376154.xml_ft2jl.xls_xsys";
         return instrumentAndStatueRepository.findByInstrumentid(instrumentid);
     }
 }

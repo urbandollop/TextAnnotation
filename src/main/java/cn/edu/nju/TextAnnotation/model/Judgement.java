@@ -67,4 +67,5 @@ public class Judgement implements Serializable {
     public void setProjectId(int projectId) {
         this.projectId = projectId;
     }
+
 }
