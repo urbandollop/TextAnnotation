@@ -12,6 +12,7 @@ public interface UserService {
 
     /**
      * 获得所有普通用户
+     *
      * @return
      */
     List<UserBean> getAllNormalUsers();
@@ -20,9 +21,18 @@ public interface UserService {
      * 用户注册
      *
      * @param newUserBean
-     * @return
-     * ResultMessageBean.ERROR, "用户名已被注册!"
+     * @return ResultMessageBean.ERROR, "用户名已被注册!"
      * ResultMessageBean.SUCCESS,"注册成功!"
      */
     ResultMessageBean signUp(NewUserBean newUserBean);
+
+    /**
+     * 修改用户密码
+     *
+     * @param id
+     * @param passwd
+     * @return ResultMessageBean.ERROR, "修改失败!"
+     * ResultMessageBean.SUCCESS,"修改成功!"
+     */
+    ResultMessageBean modify(Integer id, String passwd);
 }

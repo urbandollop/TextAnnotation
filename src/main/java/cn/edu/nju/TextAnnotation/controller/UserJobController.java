@@ -13,6 +13,7 @@ import org.springframework.http.HttpRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -33,7 +34,6 @@ public class UserJobController {
     @Autowired
     InstrumentManagementService instrumentManagementService;
 
-    //    @PreAuthorize("hasRole('user')")
     @GetMapping("/user/index")
     public ModelAndView showProjects(HttpSession session) {
         ModelAndView modelAndView = new ModelAndView("/user/projectList");
@@ -42,21 +42,16 @@ public class UserJobController {
             List<ProjectVO> allProjects = projectManagementService.userAllProjects(currentUser.getUser_id());
             modelAndView.addObject("allProjects", allProjects);
         }
-//        List<ProjectVO> allProjects = new ArrayList<ProjectVO>() {
-//            {
-//                add(new ProjectVO(1, "name", LocalDateTime.now()));
-//            }
-//        };
         return modelAndView;
     }
 
-
-        @GetMapping("/user/judgementList")
-        public ModelAndView showJudgementList(@RequestParam(value = "pid", required = true) Integer pid) {
-            ModelAndView modelAndView = new ModelAndView("/user/instrumentList");
+    @GetMapping("/user/judgementList")
+    public ModelAndView showJudgementList(@RequestParam(value = "pid", required = true) Integer pid) {
+        ModelAndView modelAndView = new ModelAndView("/user/instrumentList");
         User currentUser = userService.getCurrentUser();
-        List<InstrumentVO> instrumentVOS = instrumentManagementService.userAllInstruments(currentUser.getUser_id(),pid);
-            modelAndView.addObject("allInstuments", instrumentVOS);
+        List<InstrumentVO> instrumentVOS = instrumentManagementService.userAllInstruments(currentUser.getUser_id(), pid);
+        modelAndView.addObject("allInstuments", instrumentVOS);
         return modelAndView;
     }
+
 }

@@ -19,7 +19,8 @@ import java.util.List;
 public class User implements UserDetails {
     @Id
     @GeneratedValue
-    private Integer user_id;
+    @Column(name = "user_id")
+    private Integer userid;
     /**
      * 用户名
      */
@@ -41,11 +42,11 @@ public class User implements UserDetails {
     }
 
     public Integer getUser_id() {
-        return user_id;
+        return userid;
     }
 
-    public void setUser_id(Integer user_id) {
-        this.user_id = user_id;
+    public void setUser_id(Integer userid) {
+        this.userid = userid;
     }
 
     public String getName() {

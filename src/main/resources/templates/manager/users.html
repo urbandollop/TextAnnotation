@@ -32,13 +32,19 @@
                     <th style="text-align: center">
                         用户密码
                     </th>
+                    <th style="text-align: center">修改密码</th>
                 </tr>
                 </thead>
                 <tbody style="font-size: 17px">
                 <tr th:each="prod : ${users}">
-                    <td th:text="${prod.userId}">id</a></td>
+                    <td th:text="${prod.userId}">id</td>
                     <td th:text="${prod.username}">name</td>
                     <td>********
+                    </td>
+                    <td class="mod-button" style="width:40%;">
+                        <input type="password" class="form-control" th:id="${'user-' + prod.userId + '-passwd'}"
+                               style="width: auto; display: inline-block">
+                        <button th:onclick="${'pressMod('+prod.userId+')'}" class="btn-sm">修改密码</button>
                     </td>
                 </tr>
                 </tbody>
@@ -97,6 +103,23 @@
                 }
             }
         })
+    }
+
+    function pressMod(userid) {
+        var passwd = $('#user-' + userid + '-passwd').val();
+        if (!passwd) {
+            alert("请先输入密码！")
+        } else {
+            $.post('/manager/modify?userid=' + userid + "&passwd=" + passwd, function (result) {
+                    alert(result.resultMessage)
+                    if ('success' === result.resultCode) {
+                        window.location.reload()
+                    } else {
+                        $('#user-' + userid + '-passwd').val('');
+                    }
+                }
+            )
+        }
     }
 </script>
 </body>
