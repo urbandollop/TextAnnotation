@@ -8,5 +8,5 @@ import java.util.Map;
 public interface JudgeResultService {
     public Map<Integer, Boolean> findJudgeResult(int projectId);
 
-    public boolean saveJudgement(Judgement j);
+    public String saveJudgement(Judgement j);
 }
