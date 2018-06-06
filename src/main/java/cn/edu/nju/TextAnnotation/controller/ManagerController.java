@@ -6,6 +6,7 @@ import cn.edu.nju.TextAnnotation.service.ProjectManagementService;
 import cn.edu.nju.TextAnnotation.service.UserService;
 import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -54,6 +55,12 @@ public class ManagerController {
         ModelAndView modelAndView = new ModelAndView("/manager/users");
         modelAndView.addObject("users", userService.getAllNormalUsers());
         return modelAndView;
+    }
+
+    @PostMapping("/manager/modify")
+    public @ResponseBody
+    ResultMessageBean modifyPasswd(@RequestParam Integer userid, @RequestParam String passwd) {
+        return userService.modify(userid, passwd);
     }
 
     @PostMapping("/manager/addUser.action")

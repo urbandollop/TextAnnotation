@@ -3,6 +3,7 @@ package cn.edu.nju.TextAnnotation.service;
 
 
 import cn.edu.nju.TextAnnotation.bean.FactListBean;
+import cn.edu.nju.TextAnnotation.bean.ResultMessageBean;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;

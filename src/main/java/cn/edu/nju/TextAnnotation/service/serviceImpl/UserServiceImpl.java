@@ -66,4 +66,32 @@ public class UserServiceImpl implements UserService {
             return new ResultMessageBean(ResultMessageBean.SUCCESS, "注册成功!");
         }
     }
+
+    @Override
+    public ResultMessageBean modify(Integer id, String passwd) {
+        User user = userRepository.findUserByUseridAndRole(id, 0);
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        if (user == null) {
+            return new ResultMessageBean(ResultMessageBean.ERROR, "该用户不存在！");
+        } else {
+            user.setPassword(encoder.encode(passwd));
+            userRepository.save(user);
+            return new ResultMessageBean(ResultMessageBean.SUCCESS, "密码修改成功！");
+        }
+    }
+
+    @Override
+    public ResultMessageBean modifySelf(Integer id, String oldpass, String newpass) {
+        if (oldpass == null || oldpass.length() == 0 || newpass == null || newpass.length() == 0) {
+            return new ResultMessageBean(ResultMessageBean.ERROR, "密码不能为空！");
+        }
+        User user = userRepository.findUserByUseridAndRole(id, 0);
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        if (user == null || !encoder.matches(oldpass, user.getPassword())) {
+            return new ResultMessageBean(ResultMessageBean.ERROR, "旧密码输入错误！");
+        }
+        user.setPassword(encoder.encode(newpass));
+        userRepository.save(user);
+        return new ResultMessageBean(ResultMessageBean.SUCCESS, "密码修改成功！");
+    }
 }
