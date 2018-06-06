@@ -2,9 +2,11 @@ package cn.edu.nju.TextAnnotation.controller;
 
 import cn.edu.nju.TextAnnotation.bean.*;
 import cn.edu.nju.TextAnnotation.model.Judgement;
+import cn.edu.nju.TextAnnotation.model.User;
 import cn.edu.nju.TextAnnotation.service.FactService;
 import cn.edu.nju.TextAnnotation.service.JudgeResultService;
 import cn.edu.nju.TextAnnotation.service.StatuteService;
+import cn.edu.nju.TextAnnotation.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,6 +32,9 @@ public class ShowAnnotationController {
     @Autowired
     private JudgeResultService judgeResultService;
 
+    @Autowired
+    private UserService userService;
+
     @RequestMapping(value = "/judgeAnnotation", method = RequestMethod.GET)
 
     public String displayAnnotation(Model model,@RequestParam(value = "iid", required = true) String instrumentid) {
@@ -46,19 +51,20 @@ public class ShowAnnotationController {
     @PostMapping("/annotationSubmit.action")
     public @ResponseBody
     ResultMessageBean annotationSubmit(@RequestBody List<JudgementListBean> judgementListBeans){
+        User user = userService.getCurrentUser();
+        String msg = "";
         if(judgementListBeans!=null){
             for (int i=0;i<judgementListBeans.size();i++){
-                System.out.println("===============");
+//                System.out.println("===============");
                 Judgement judgement=new Judgement();
-                judgement.setJudgement_id(judgementListBeans.get(i).getJudementid());
-                judgement.setUserId(judgementListBeans.get(i).getUserid());
+                judgement.setUserId(user.getUser_id());
                 judgement.setFactId(judgementListBeans.get(i).getFactid());
                 judgement.setStatuteId(judgementListBeans.get(i).getStatuteid());
                 judgement.setIsrelated(judgementListBeans.get(i).getIsrelated());
                 judgement.setProjectId(judgementListBeans.get(i).getProjectid());
-                judgeResultService.saveJudgement(judgement);
+                 msg +=  judgeResultService.saveJudgement(judgement);
             }
-            return  new ResultMessageBean(ResultMessageBean.SUCCESS, "提交成功");
+            return  new ResultMessageBean(ResultMessageBean.ERROR, msg);
         }
         else{
             return  new ResultMessageBean(ResultMessageBean.ERROR, "提交失败");
