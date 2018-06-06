@@ -2,7 +2,6 @@ package cn.edu.nju.TextAnnotation.bean;
 
 public class JudgementListBean {
     public Integer judementid;
-    public Integer userid;
     public Integer factid;
     public String statuteid;
     public Integer isrelated;
@@ -20,13 +19,7 @@ public class JudgementListBean {
         this.judementid = judementid;
     }
 
-    public Integer getUserid() {
-        return userid;
-    }
 
-    public void setUserid(Integer userid) {
-        this.userid = userid;
-    }
     public Integer getFactid() {
         return factid;
     }
