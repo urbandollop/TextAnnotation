@@ -27,7 +27,10 @@ public class DownloadExcelController {
 
     @RequestMapping(value = "",method = RequestMethod.GET)
     public String showStatuteList(Model model){
-        List<StatuteListBean> statuteListBeans = statuteService.getAllStatute();
+//        List<StatuteListBean> statuteListBeans = statuteService.getAllStatute();
+        int projectid = 12620;
+        List<StatuteListBean> statuteListBeans = excelService.getMostStatute(projectid,-1);
+
         model.addAttribute("allStatutes",statuteListBeans);
         return "/excel/showStatuteList";
     }
@@ -42,7 +45,7 @@ public class DownloadExcelController {
         model.addAttribute("allFacts",factListBeans);
         return "/excel/export";
     }
-    @PostMapping(value = "/download")
+    @PostMapping(value = "/download.action")
     public  String  downloadExcel(HttpSession session,HttpServletResponse response)  {
         String sid = session.getAttribute("sid").toString();
         List<FactListBean> factListBeans = excelService.getAllFromFactWhereStatuteId(sid);
@@ -54,24 +57,4 @@ public class DownloadExcelController {
         }catch(Exception e){
             return "/excel/export";        }
     }
-//    public String showExport(Model model){
-//        String sname = "中华人民共和国刑法(2015)第一百三十三条";
-//        List<FactListBean> factListBeans = excelService.getAllFromFactWhereStatuteName(sname);
-//        model.addAttribute("allFacts",factListBeans);
-//        return "/excel/export";
-//    }
-
-//@PostMapping(value = "/export/download")
-//public  String  downloadExcel(HttpServletResponse response)  {
-//        String sname ="中华人民共和国刑法(2015)第一百三十三条";
-//    List<FactListBean> factListBeans = excelService.getAllFromFactWhereStatuteName(sname);
-//    try {
-//        excelService.downloadExportExcel(response,sname,factListBeans);
-//        return "/excel/export";
-//    }catch(Exception e){
-//        return "/excel/export";        }
-//
-//}
-
-
 }

@@ -4,6 +4,7 @@ package cn.edu.nju.TextAnnotation.service;
 
 import cn.edu.nju.TextAnnotation.bean.FactListBean;
 import cn.edu.nju.TextAnnotation.bean.ResultMessageBean;
+import cn.edu.nju.TextAnnotation.bean.StatuteListBean;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -19,5 +20,5 @@ public interface ExcelService {
 
   public  void downloadExportExcel(HttpServletResponse response, String statuteName, List<FactListBean> data) throws Exception;
 
-
+  public List<StatuteListBean> getMostStatute(Integer projectid,Integer isrelated);
 }

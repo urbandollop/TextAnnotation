@@ -33,8 +33,7 @@
                 <tbody style="font-size: 17px">
                 <tr th:each="prod : ${allStatutes}">
                     <td WIDTH="200" th:text="${prod.statuteid}">id</td>
-                    <td th:text="${prod.name}">name</td>
-                    <!--th:title="${prod.test}"-->
+                    <td th:text="${prod.name}" th:title="${prod.text}">name</td>
                     <td WIDTH="200"><a th:href="@{'/export/facts?sid='+${prod.statuteid}}">预览</a></td>
                 </tr>
                 </tbody>

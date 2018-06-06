@@ -29,10 +29,10 @@
                     <th style="text-align: center">文书序号</th>
                 </tr>
                 </thead>
-                <tbody style="font-size: 17px">
+                <tbody style="font-size: 17px" th:with="pid=${#httpServletRequest.getParameter('pid')}">
                 <tr th:each="prod : ${allInstuments}">
                     <td>
-                        <a th:href="@{'/judge/judgeAnnotation?iid='+${prod.instrumentid}+'&xml='+${prod.xml}}" th:text="${prod.xml}">xml</a></td>
+                        <a th:href="@{'/judge/judgeAnnotation?pid='+${pid}+'&iid='+${prod.instrumentid}+'&xml='+${prod.xml}}" th:text="${prod.xml}">xml</a></td>
                     <td th:text="${prod.num}">num</td>
                 </tr>
                 </tbody>

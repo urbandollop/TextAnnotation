@@ -13,7 +13,7 @@
     <script th:src="@{~/js/respond.min.js}"></script>
     <script th:src="@{~/js/jquery.js}"></script>
     <script th:src="@{~/js/bootstrap.min.js}"></script>
-
+    <script th:src="@{~/js/toastr.min.js}"></script>
 </head>
 <body>
 <div th:replace="common/nav :: nav"></div>
@@ -27,15 +27,15 @@
                 <tr>
                     <th style="text-align: center">
                         <div style="margin: 0 auto;">
-                        <!--<form class="form-horizontal" id="uploadForm" enctype="multipart/form-data">-->
-                        <form class="form-horizontal" id="uploadForm" enctype="multipart/form-data" action="#" th:action="@{/import/upload.action}" method="post">
+                            <!--<form class="form-horizontal" id="uploadForm" enctype="multipart/form-data" action="#" th:action="@{/import/upload.action}" method="post">-->
+                        <form class="form-horizontal" id="uploadForm" enctype="multipart/form-data">
                         <input class="form-input" type="file" name="filename" multiple="multiple"></input>
                         <br/>
-                            <button type="submit" class="btn btn-primary">开始导入</button>
-                        <!--<button type="button" class="btn btn-primary" th:onclick="'javascript:startImport()'">开始导入</button>-->
+                        <!--<button type="submit" class="btn btn-primary">开始导入</button>-->
+                        <button id="buttonImport" type="button" class="btn btn-primary" th:onclick="'javascript:startImport()'">开始导入</button>
                         </form>
-                        <div id="message" class="alert alert-danger" role="alert" th:text="${session.msg}">导入信息
-                        </div>
+                        <!--<div id="message" class="alert alert-danger" role="alert" th:text="${session.msg}">导入信息</div>-->
+                            <div id="message" class="alert alert-danger" role="alert" ></div>
                         </div>
                     </th>
 
@@ -48,7 +48,36 @@
 </div>
 
 <div th:replace="common/footer :: footer"></div>
-
+<script th:inline="javascript">
+    function startImport() {
+        $("#buttonImport").attr("disabled","disabled")
+        var uploadForm = $('#uploadForm')[0];
+        var form = new FormData(uploadForm);
+        var msg = $('#message');
+        msg.html("正在导入中……")
+        $.ajax({
+            url: '/import/upload.action',
+            type: 'POST',
+            enctype: 'multipart/form-data',
+            data: form,
+            processData: false,
+            contentType: false,
+            cache: false,
+            timeout: 600000,
+            dataType: 'text',
+            success: function (data) {
+//                 var jsonData = JSON.parse(data)
+//                alert(data.toString())
+                msg.html(data)
+                $("#buttonImport").removeAttr("disabled")
+//              toastr.warning(jsonData.resultMessage)
+            },
+            error:function (data){
+                $("#buttonImport").removeAttr("disabled")
+            }
+        })
+    }
+</script>
 
 </body>
 </html>

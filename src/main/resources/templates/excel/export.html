@@ -21,9 +21,9 @@
     <div>
         <h1 th:text="'《'+${session.sname}+'》相关联事实'">与法条名称相关事实</h1>
 
-        <div style="margin: 10px auto;"> <form class="form-horizontal" id="form_table" action="#" th:action="@{/export/download}" enctype="multipart/form-data" method="post">
+        <div style="margin: 10px auto;"> <form class="form-horizontal" id="form_table" action="#" th:action="@{/export/download.action}" enctype="multipart/form-data" method="post">
 
-        <button type="submit" class="btn">导出excel</button>
+        <button type="submit" class="btn btn-primary">导出excel</button>
     </form></div>
 
         <div style="margin-left: 10%;margin-right: 10%;padding-top: 3%">

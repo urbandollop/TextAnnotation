@@ -2,6 +2,8 @@ package cn.edu.nju.TextAnnotation.service.serviceImpl;
 
 
 import cn.edu.nju.TextAnnotation.bean.FactListBean;
+import cn.edu.nju.TextAnnotation.bean.JudgementDto;
+import cn.edu.nju.TextAnnotation.bean.StatuteListBean;
 import cn.edu.nju.TextAnnotation.model.*;
 import cn.edu.nju.TextAnnotation.repository.*;
 import cn.edu.nju.TextAnnotation.service.ExcelService;
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ClassUtils;
 import org.springframework.web.multipart.MultipartFile;
+
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
@@ -56,10 +59,8 @@ public class ExcelServiceImpl implements ExcelService {
         try{
             //将上传的文件写入新建的文件中
             mfile.transferTo(tempFile);
-
             //根据新建的文件实例化输入流
             is = new FileInputStream(tempFile);
-
             //根据版本选择创建Workbook的方式
             Workbook wb = null;
             //根据文件名判断文件是2003版本还是2007版本
@@ -71,8 +72,13 @@ public class ExcelServiceImpl implements ExcelService {
             //根据excel里面的内容读取知识库信息
             return readExcelValue(wb,fileName,tempFile);
         }catch(Exception e){
+            //删除上传的临时文件
+            if(tempFile.exists()){
+                tempFile.delete();
+            }
             e.printStackTrace();
-            return "导入出错！请检查数据格式！";
+//            return "导入出错！请检查数据格式！";
+            return e.getMessage();
         } finally{
             if(is !=null)
             {
@@ -80,6 +86,10 @@ public class ExcelServiceImpl implements ExcelService {
                     is.close();
                 }catch(IOException e){
                     is = null;
+                    //删除上传的临时文件
+                    if(tempFile.exists()){
+                        tempFile.delete();
+                    }
                     e.printStackTrace();
                     return "导入出错！请检查数据格式！";
                 }
@@ -179,20 +189,14 @@ public class ExcelServiceImpl implements ExcelService {
      * @return
      */
     private String readExcelValue(Workbook wb,String fileName,File tempFile){
-
-
-
         //错误信息接收器
         String errorMsg = "";
-
         //成功条数计数
         int count=0;
-
         //存文书表
         Instrument instrument = readInstrument(fileName);
         count = saveInstrument(instrument,count);
-        errorMsg = "存instrument表"+ count +"条;";
-
+        errorMsg = "存文书表"+ count +"条;";
         //得到第一个shell
         Sheet sheet=wb.getSheetAt(0);
         //得到Excel的行数
@@ -203,11 +207,8 @@ public class ExcelServiceImpl implements ExcelService {
         if(totalRows>=2 && sheet.getRow(0) != null){
             totalCells=sheet.getRow(0).getPhysicalNumberOfCells();
         }
-
-
             if (sheet != null) {
                 if (totalRows>=2 && sheet.getRow(0) != null) {
-
                     Row row = sheet.getRow(0);
                     count =0;
                     for(int colNum = 1; colNum <= totalCells; colNum++) {
@@ -219,10 +220,9 @@ public class ExcelServiceImpl implements ExcelService {
                             statute.setText(text.getStringCellValue());//获得法条内容
                             //存法条表
                             count = saveStatuteWithLaw1Article(statute,count);
-
                         }
                     }
-                    errorMsg += "存Statute表"+count+"条;";
+                    errorMsg += "存法条表"+count+"条;";
 
                     count =0;
                     for(int colNum = 1; colNum <= totalCells; colNum++) {
@@ -234,12 +234,10 @@ public class ExcelServiceImpl implements ExcelService {
                             instrumentAndStatute.setInstrumentid(instrument.getInstrumentid());//获得文书id
                             instrumentAndStatute.setNum(colNum);//获得法条在文书中顺序
                            //存文书-法条表
-
                             count = saveInstrumentAndStatute(instrumentAndStatute,name,count);
-
                         }
                     }
-                    errorMsg += "存instrumentAndStatute表"+count+"条;";
+                    errorMsg += "存文书-法条表"+count+"条;";
 
                     count =0;
                     for(int rowNum = 1; rowNum <= totalRows; rowNum++) {
@@ -252,13 +250,12 @@ public class ExcelServiceImpl implements ExcelService {
                                 fact.setNum(rowNum);
                                 fact.setInstrumentid(instrument.getInstrumentid());
                                //存事实表
-
                                 count =  saveFact(fact,count);
 
                             }
                         }
                     }
-                    errorMsg += "存Fact表"+count+"条";
+                    errorMsg += "存事实表"+count+"条";
                 }
             }
 
@@ -273,6 +270,19 @@ public class ExcelServiceImpl implements ExcelService {
 
 
     //导出excel部分
+    //获取judgement表中数量最多的statute相关信息
+    @Override
+    public List<StatuteListBean> getMostStatute(Integer projectid,Integer isrelated){
+        List<JudgementDto> judgementDtos = judgementRepository.findJudgementDto(projectid,isrelated);
+        List<StatuteListBean> statuteListBeans = new ArrayList<>();
+        for(JudgementDto j:judgementDtos)
+        {
+            StatuteListBean statuteListBean =new StatuteListBean(statuteRepository.findByStatuteid(j.getStatuteid())) ;
+            statuteListBeans.add(statuteListBean);
+        }
+        return statuteListBeans;
+    }
+
     @Override
     public List<FactListBean> getAllFromFactWhereStatuteId(String sid){
         List<Judgement> judgements=judgementRepository.findAllByStatuteIdAndIsrelated(sid,1);
