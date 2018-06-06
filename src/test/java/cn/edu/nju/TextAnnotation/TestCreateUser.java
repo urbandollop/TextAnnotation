@@ -16,9 +16,10 @@ public class TestCreateUser extends TextAnnotationApplicationTests {
     @Test
     public void testCreate() {
         String username = "admin";
-        String password = "admin";
+        String password = "123";
         Integer role = 1;
         User user = new User(username, encodePassword(password), role);
+        user.setUser_id(1);
         userRepository.save(user);
 //        String username = "user";
 //        String password = "user";

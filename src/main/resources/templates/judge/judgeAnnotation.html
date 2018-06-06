@@ -7,7 +7,6 @@
     <title>文书标注页面</title>
     <link th:href="@{~/css/bootstrap.min.css}" type="text/css" rel="stylesheet"/>
     <link th:href="@{~/css/fixed-footer.css}" type="text/css" rel="stylesheet"/>
-    <link rel="stylesheet" th:href="@{~/css/toastr.css}"/>
 
     <script th:src="@{~/js/html5shiv.min.js}"></script>
     <script th:src="@{~/js/respond.min.js}"></script>
@@ -22,34 +21,35 @@
     <div th:with="xml=${#httpServletRequest.getParameter('xml')}">
         <h1 th:text="${xml}">文书名称</h1>
         <div >
-            <form th:action="@{/annotationSubmit}" method="post">
-                <table  th:each="factListBeans: ${factListBeans}" border="0">
-                    <tr><br/><td  style="font-size: 17px" th:text="'事实'+${factListBeans.num}+'：'+${factListBeans.text}"> </td><br/></tr>
-
-                    <tr><td>
-                        <table  style="cursor:pointer" border="1">
-                            <thead style="font-size: 20px">
-                            <tr>
-                                <td>是否相关</td>
-                                <td>法条名称</td>
-                                <td>法条内容</td>
-                            </tr>
-                            </thead>
-                            <tbody style="font-size: 17px">
-                            <tr th:each="statuteListBeans: ${statuteListBeans}">
-                                <td style="width: 20%;">
-                                    <input type='checkbox' name='VoteOption1' value=0>相关<br>
-                                    <input type='checkbox' name='VoteOption1' value=1>不相关<br>
-                                </td>
-                                <td style="width: 30%;" th:text="${statuteListBeans.name}" ></td>
-                                <td th:text="${statuteListBeans.text}"></td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </td></tr>
+            <form >
+                <table  th:each="factListBeans: ${listBean.list}" id="annotationtable" border="0" >
+                    <tr><br/><td  style="font-size: 17px" th:text="'事实'+${factListBeans.num}+'：'+${factListBeans.text}" th:id="'factBean'+${factListBeans.factid}"> </td><br/></tr>
+                    <tr>
+                        <td>
+                            <table border="1" th:id="'statutetable'+${factListBeans.factid}">
+                                <thead style="font-size: 20px">
+                                <tr>
+                                    <td>是否相关</td>
+                                    <td>法条名称</td>
+                                    <td>法条内容</td>
+                                </tr>
+                                </thead>
+                                <tbody style="font-size: 17px">
+                                <tr th:each="statuteListBeans: ${statuteListBeans}" >
+                                    <td style="width: 20%;">
+                                        <input type='checkbox' name='VoteOption1' value=1 th:id="'check'+${statuteListBeans.statuteid}">相关<br>
+                                        <input type='checkbox' name='VoteOption1' checked="checked" value=0 th:id="'check'+${statuteListBeans.statuteid}">不相关<br>
+                                    </td>
+                                    <td style="width: 30%;" th:text="${statuteListBeans.name}" ></td>
+                                    <td th:text="${statuteListBeans.text}" ></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
                 </table>
-                <button type="submit" class="btn btn-info" style="margin-right: 2%">提交预览
-                </button>
+                    <button  type="submit"  class="btn-default"  th:onclick="'javascript:annotationSubmit()'">提交预览
+                    </button>
             </form>
         </div>
     </div>
@@ -57,5 +57,35 @@
 <footer class="panel-footer">
     <div th:replace="common/footer :: footer"></div>
 </footer>
+
+
+<script th:inline="javascript">
+  function annotationSubmit() {
+      var table=document.getElementById('annotationtable')
+      var judgementList=new Array()
+      for(var i=1;i<table.rows.length;i++){
+          var userid=0
+          var factid=table.rows[i-1].cells[0].id.split('factBean')
+          var isrelated=table.rows[i].cells[0].getElementsByTagName('input').checked.value()
+          var statuteid=table.rows[i].cells[0].getElementsByTagName('input').checked.id.spilt('statutename')
+          var projectid=9
+          judgementList.push({userid:userid, factid:factid,isrelated:isrelated,factid:factid,statuteid:statuteid,projectid:projectid})
+      }
+      $.ajax({
+          url:'/judge/annotationSubmit.action',
+          type: 'POST',
+          contentType: 'application/json',
+          dataType:'json',
+          data: JSON.stringify(judgementList),
+          success: function (data) {
+              if(data.resultCode === 'error'){
+                  toastr.warning(data.resultMessage)
+              }else {
+                  window.location.href('/login')
+              }
+          }
+      })
+  }
+</script>
 </body>
 </html>
