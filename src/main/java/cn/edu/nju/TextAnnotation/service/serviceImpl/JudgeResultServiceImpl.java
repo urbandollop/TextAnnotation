@@ -32,11 +32,10 @@ public class JudgeResultServiceImpl implements JudgeResultService {
     }
 
     @Override
-    public boolean saveJudgement(Judgement j) {
-        if (j != null) {
-            judgementRepository.save(j);
-            return true;
-        }
-        return false;
+    public String saveJudgement(Judgement j) {
+        Judgement judgement = judgementRepository.findFirstByUserIdAndFactIdAndStatuteIdAndProjectId(j.getUserId(),j.getFactId(),j.getStatuteId(),j.getProjectId());
+        judgement.setIsrelated(j.getIsrelated());
+        judgementRepository.save(judgement);
+        return "保存jid="+judgement.getJudgement_id()+",成功!";
     }
 }
