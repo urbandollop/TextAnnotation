@@ -91,13 +91,13 @@ public class ExcelServiceImpl implements ExcelService {
                         message += saveIntoInstrumentAndStatute(wb,fileName);
                         message += saveIntoInstrumentAndStatuteAndFact(wb,fileName);
                     }catch(Exception e){
-            try {
-                File f = new File("C:\\Users\\czh\\Desktop\\log\\a.txt");
-                PrintStream stream = new PrintStream(f);
-                e.printStackTrace(stream);
-            }catch (Exception e2){
-                e2.printStackTrace();
-            }
+//            try {
+//                File f = new File("C:\\Users\\czh\\Desktop\\log\\a.txt");
+//                PrintStream stream = new PrintStream(f);
+//                e.printStackTrace(stream);
+//            }catch (Exception e2){
+//                e2.printStackTrace();
+//            }
                         e.printStackTrace();
 //            return "导入出错！请检查数据格式！";
                         message += e.getMessage();
