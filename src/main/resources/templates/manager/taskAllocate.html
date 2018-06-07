@@ -8,6 +8,10 @@
 
     <link th:href="@{~/css/bootstrap.min.css}" type="text/css" rel="stylesheet"/>
     <link th:href="@{~/css/fixed-footer.css}" type="text/css" rel="stylesheet"/>
+    <link th:href="@{~/css/toastr.css}" type="text/css" rel="stylesheet">
+
+    <link th:href="@{~/css/loaders.css}" type="text/css" rel="stylesheet"/>
+
 
     <script th:src="@{~/js/html5shiv.min.js}"></script>
     <script th:src="@{~/js/respond.min.js}"></script>
@@ -17,6 +21,7 @@
 </head>
 <body>
 <div th:replace="common/nav :: nav"></div>
+
 <div class="container" style="text-align: center;">
     <div>
         <h2>项目任务分配</h2>
@@ -60,9 +65,46 @@
     <button class="btn-default" th:onclick="'javascript:submitAllocation('+${project.project_id}+')'">确认分配</button>
 </div>
 
+<div class="modal fade" tabindex="-1" role="dialog" id="loader">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-body" style="text-align: center">
+                <div class="loader">
+                    <div class="line-scale-pulse-out-rapid">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
+                <div>任务分配中...</div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
 <div th:replace="common/footer :: footer"></div>
 
 <script th:inline="javascript">
+    toastr.options = {
+        closeButton: false,
+        debug: false,
+        progressBar: true,
+        positionClass: "toast-top-center",
+        onclick: null,
+        showDuration: "300",
+        hideDuration: "1000",
+        timeOut: "3000",
+        extendedTimeOut: "1000",
+        showEasing: "swing",
+        hideEasing: "linear",
+        showMethod: "fadeIn",
+        hideMethod: "fadeOut"
+    };
+
     $(function () {
         var s = $("input[name='check']");
         s.each(function (i) {
@@ -96,17 +138,23 @@
         }
 
         $.ajax({
-            url:'/manager/allocate.action',
+            url: '/manager/allocate.action',
             type: 'POST',
             contentType: 'application/json',
-            dataType:'json',
+            dataType: 'json',
             data: JSON.stringify(infoList),
+            beforeSend: function () {
+                $("#loader").modal('show')
+            },
             success: function (data) {
-                if(data.resultCode === 'error'){
+                if (data.resultCode === 'error') {
                     toastr.warning(data.resultMessage)
-                }else {
-                    window.location.href('/manager/index')
+                } else {
+                    window.location.href = '/manager/index'
                 }
+            },
+            complete: function () {
+                $("#loader").modal('hide')
             }
         })
     }
