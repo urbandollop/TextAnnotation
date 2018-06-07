@@ -84,42 +84,54 @@ public class ProjectManagementServiceImpl implements ProjectManagementService {
 
     @Override
     public ResultMessageBean allocateTask(List<TaskAllocationBean> allocationBeans) {
+        Optional<Project> project;
         Task task;
         Judgement judgement;
         if (allocationBeans == null) {
             return new ResultMessageBean(ResultMessageBean.ERROR, "任务分配失败");
         }
-        for (TaskAllocationBean t : allocationBeans) {
-            if (t.isAllocated) {
-                task = new Task();
-                task.setBegin(t.startNo);
-                task.setEnd(t.endNo);
-                task.setProject_id(t.projectId);
-                task.setUserid(t.userId);
-                taskManagementService.saveTask(task);
+        try {
+            project = projectRepository.findById(allocationBeans.get(0).projectId);
+            if (!project.isPresent()) {
+                return new ResultMessageBean(ResultMessageBean.ERROR, "不存在该项目");
+            }
+            Project proget = project.get();
+            proget.setAllocated(true);
+            projectRepository.save(proget);
+            for (TaskAllocationBean t : allocationBeans) {
+                if (t.isAllocated) {
+                    task = new Task();
+                    task.setBegin(t.startNo);
+                    task.setEnd(t.endNo);
+                    task.setProject_id(t.projectId);
+                    task.setUserid(t.userId);
+                    taskManagementService.saveTask(task);
 
-                List<Instrument> instruments = instrumentRepository.findInstrumentsByNumBetween(t.startNo, t.endNo);
-                if (instruments != null) {
-                    for (Instrument i : instruments) {
-                        List<FactListBean> factListBeans = factService.getAllFactByInstrumentId(i.getInstrumentid());
-                        List<StatuteListBean> statuteListBeans = statuteService.getAllStatuteByStatuteid(i.getInstrumentid());
-                        if (factListBeans != null && factListBeans.size() > 0 && statuteListBeans != null && statuteListBeans.size() > 0) {
-                            for (FactListBean f : factListBeans) {
-                                for (StatuteListBean s : statuteListBeans) {
-                                    judgement = new Judgement();
-                                    judgement.setFactId(f.factid);
-                                    judgement.setProjectId(t.projectId);
-                                    judgement.setIsrelated(-1);
-                                    judgement.setStatuteId(s.statuteid);
-                                    judgement.setUserId(t.userId);
-                                    judgeResultService.saveJudgement(judgement);
+                    List<Instrument> instruments = instrumentRepository.findInstrumentsByNumBetween(t.startNo, t.endNo);
+                    if (instruments != null) {
+                        for (Instrument i : instruments) {
+                            List<FactListBean> factListBeans = factService.getAllFactByInstrumentId(i.getInstrumentid());
+                            List<StatuteListBean> statuteListBeans = statuteService.getAllStatuteByStatuteid(i.getInstrumentid());
+                            if (factListBeans != null && factListBeans.size() > 0 && statuteListBeans != null && statuteListBeans.size() > 0) {
+                                for (FactListBean f : factListBeans) {
+                                    for (StatuteListBean s : statuteListBeans) {
+                                        judgement = new Judgement();
+                                        judgement.setFactId(f.factid);
+                                        judgement.setProjectId(t.projectId);
+                                        judgement.setIsrelated(-1);
+                                        judgement.setStatuteId(s.statuteid);
+                                        judgement.setUserId(t.userId);
+                                        judgeResultService.saveJudgement(judgement);
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
+            return new ResultMessageBean(ResultMessageBean.SUCCESS);
+        } catch (Exception e) {
+            return new ResultMessageBean(ResultMessageBean.ERROR, "任务分配失败");
         }
-        return new ResultMessageBean(ResultMessageBean.SUCCESS);
     }
 }
