@@ -32,7 +32,7 @@ public class DownloadExcelController {
         List<StatuteListBean> statuteListBeans = excelService.getMostStatute(projectid,-1);
 
         model.addAttribute("allStatutes",statuteListBeans);
-        return "/excel/showStatuteList";
+        return "/manager/showStatuteList";
     }
 
     @RequestMapping(value = "/facts",method = RequestMethod.GET)
@@ -43,7 +43,7 @@ public class DownloadExcelController {
         session.setAttribute("sid",sid);
         List<FactListBean> factListBeans = excelService.getAllFromFactWhereStatuteId(sid);
         model.addAttribute("allFacts",factListBeans);
-        return "/excel/export";
+        return "/manager/export";
     }
     @PostMapping(value = "/download.action")
     public  String  downloadExcel(HttpSession session,HttpServletResponse response)  {
@@ -53,8 +53,8 @@ public class DownloadExcelController {
         String sname = statuteListBean.getName();
         try {
             excelService.downloadExportExcel(response,sname,factListBeans);
-            return "/excel/export";
+            return "/manager/export";
         }catch(Exception e){
-            return "/excel/export";        }
+            return "/manager/export";        }
     }
 }

@@ -23,7 +23,7 @@ public class UploadExcelController {
 
     @RequestMapping(value = "",method = RequestMethod.GET)
     public String showImport(){
-        return "/excel/import";
+        return "/manager/import";
     }
 
 //    @PostMapping(value = "/upload.action")
