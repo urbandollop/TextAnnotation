@@ -52,6 +52,7 @@ public class ExcelServiceImpl implements ExcelService {
         String message = "";
         //获取项目绝对路径
         String path=this.getClass().getClassLoader().getResource("").getPath();
+        path = path.substring(0,path.length()-15);
         File uploadDir = new  File(path);
         //创建一个目录 （它的路径名由当前 File 对象指定，包括任一必须的父路径。）
         if (!uploadDir.exists()) uploadDir.mkdirs();
@@ -247,7 +248,8 @@ public class ExcelServiceImpl implements ExcelService {
         if(law1Article != null) {
             String id = law1Article.getCode();
             statute.setStatuteid(id);//从law1Article表中取到Statuteid
-            if (statuteRepository.findByStatuteid(id) == null)//判断法条表中是否已存在该条，若不存在，保存
+            Statute statute1=statuteRepository.findByStatuteid(id);
+            if (statute1 == null)//判断法条表中是否已存在该条，若不存在，保存
             {
                 statuteRepository.save(statute);
                 count += 1;
@@ -257,7 +259,8 @@ public class ExcelServiceImpl implements ExcelService {
     }
     @Override
     public Integer saveInstrument(Instrument instrument,Integer count){
-        if(instrumentRepository.findFirstByInstrumentid(instrument.getInstrumentid())==null)
+        Instrument instrument1=instrumentRepository.findFirstByInstrumentid(instrument.getInstrumentid());
+        if(instrument1==null)
         {
             instrumentRepository.save(instrument);
             count += 1;
@@ -268,7 +271,8 @@ public class ExcelServiceImpl implements ExcelService {
     public Integer saveInstrumentAndStatute(InstrumentAndStatute instrumentAndStatute,String statute_name,Integer count){
         Statute statute =  statuteRepository.findFirstByName(statute_name);
         instrumentAndStatute.setStatuteid(statute.getStatuteid());
-        if(instrumentAndStatueRepository.findFirstByInstrumentidAndStatuteid(instrumentAndStatute.getInstrumentid(),instrumentAndStatute.getStatuteid())==null)
+        InstrumentAndStatute instrumentAndStatute1=instrumentAndStatueRepository.findFirstByInstrumentidAndStatuteid(instrumentAndStatute.getInstrumentid(),instrumentAndStatute.getStatuteid());
+        if(instrumentAndStatute1 == null)
         {
             instrumentAndStatueRepository.save(instrumentAndStatute);
             count += 1;
@@ -278,7 +282,8 @@ public class ExcelServiceImpl implements ExcelService {
     @Override
     public Integer saveFact(Fact fact,Integer count)
     {
-        if(factRepository.findFirstByInstrumentidAndNum(fact.getInstrumentid(),fact.getNum())==null)
+        Fact fact1=factRepository.findFirstByInstrumentidAndNum(fact.getInstrumentid(),fact.getNum());
+        if(fact1==null)
         {
             if(fact.getFactid()==null){
             factRepository.save(fact);
