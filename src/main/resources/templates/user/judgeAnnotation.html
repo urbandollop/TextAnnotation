@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>文书标注页面</title>
+    <link th:href="@{~/css/bootstrap.min.css}" type="text/css" rel="stylesheet"/>
+    <link th:href="@{~/css/fixed-footer.css}" type="text/css" rel="stylesheet"/>
+
+    <script th:src="@{~/js/html5shiv.min.js}"></script>
+    <script th:src="@{~/js/respond.min.js}"></script>
+    <script th:src="@{~/js/jquery.js}"></script>
+    <script th:src="@{~/js/bootstrap.min.js}"></script>
+    <script th:src="@{~/js/toastr.min.js}"></script>
+    <!--<link th:href="@{~/css/style.css}" type="text/css" rel="stylesheet"/>-->
+</head>
+<body>
+<div th:replace="common/nav :: nav"></div>
+<div class="container" style="text-align: center;">
+    <div th:with="xml=${#httpServletRequest.getParameter('xml')}">
+        <h1 th:text="${xml}">文书名称</h1>
+        <div  th:with="pid=${#httpServletRequest.getParameter('pid')}">
+         <label id="pidlabel" style="display: none" th:text="${pid}"></label>
+
+                <table style="margin-top: 30px;"  th:each="factListBeans,factListBeansStat: ${listBean.list}" th:id="'annotationtable'+${factListBeansStat.index}" border="0" >
+                    <tr>
+                        <label id="fsizelabel" style="display: none" th:text="${factListBeansStat.size}"></label>
+                        <td  style="font-size: 17px;" th:text="'事实'+${factListBeans.num}+'：'+${factListBeans.text}" th:id="'factBean'+${factListBeans.factid}">
+                    </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <table border="1" th:id="'statutetable'+${factListBeans.factid}">
+                                <thead style="font-size: 20px">
+                                <tr>
+                                    <td>是否相关</td>
+                                    <td>法条名称</td>
+                                    <td>法条内容</td>
+                                </tr>
+                                </thead>
+                                <tbody style="font-size: 17px">
+                                <tr th:each="statuteListBeans,statuteListBeanStat: ${statuteListBeans}" >
+                                    <label th:id="'ssizelabel'+${factListBeansStat.index}" style="display: none" th:text="${statuteListBeanStat.size}"></label>
+                                    <td style="width: 20%;">
+                                            <label th:for="'checkxg'+${factListBeans.factid}+${statuteListBeans.statuteid}"><input type='radio' th:name="'check'+${factListBeans.factid}+${statuteListBeans.statuteid}" value=1 th:id="'checkxg'+${factListBeans.factid}+${statuteListBeans.statuteid}">相关<br></label>
+                                            <label th:for="'checkbxg'+${factListBeans.factid}+${statuteListBeans.statuteid}"><input type='radio' th:name="'check'+${factListBeans.factid}+${statuteListBeans.statuteid}" value=0  checked th:id="'checkbxg'+${factListBeans.factid}+${statuteListBeans.statuteid}">不相关<br></label>
+                                    </td>
+                                    <td style="width: 30%;" th:text="${statuteListBeans.name}" th:id="${statuteListBeans.statuteid}" ></td>
+                                    <td th:text="${statuteListBeans.text}" ></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                    <button   class="btn-default"  th:onclick="'javascript:annotationSubmit()'">提交预览
+                    </button>
+
+        </div>
+    </div>
+</div>
+<footer class="panel-footer">
+    <div th:replace="common/footer :: footer"></div>
+</footer>
+
+
+<script th:inline="javascript">
+  function annotationSubmit() {
+
+      var judgementList=new Array()
+      var pidlabel = document.getElementById('pidlabel')
+      var pidtext = pidlabel.innerText
+      var fsizelabel = document.getElementById('fsizelabel')
+      var fsize = fsizelabel.innerText
+      var ssizelabel = document.getElementById('ssizelabel0')
+      var ssize = ssizelabel.innerText
+      var projectid=parseInt(pidtext)//取项目id
+
+          for(var i=0;i<parseInt(fsize);i++){
+              var table=document.getElementById('annotationtable'+i.toString())
+              var factid=table.rows[0].getElementsByTagName('td')[0].id.split('factBean')[1]
+              factid = parseInt(factid)//取事实id
+
+              var table2=document.getElementById('statutetable'+factid.toString())
+              for(var k=1;k<=parseInt(ssize);k++){
+                  var isrelated = -1;
+                  var radio0=table2.rows[k].cells[0].getElementsByTagName('input')[0]
+                  if (radio0.checked){isrelated = radio0.value}
+                  var radio1=table2.rows[k].cells[0].getElementsByTagName('input')[1]
+                  if (radio1.checked){isrelated = radio1.value}
+                  isrelated = parseInt(isrelated)//取是否相关
+
+                  var statuteid=table2.rows[k].cells[1].id.toString()//取法条id
+
+                  judgementList.push({ factid:factid,isrelated:isrelated,factid:factid,statuteid:statuteid,projectid:projectid})
+              }
+      }
+
+      $.ajax({
+          url:'/judge/annotationSubmit.action',
+          type: 'POST',
+          contentType: 'application/json',
+          dataType:'json',
+          data: JSON.stringify(judgementList),
+          success: function (data) {
+              if(data.resultCode === 'error'){
+                  toastr.warning(data.resultMessage)
+              }else {
+                  window.location.href('/login')
+              }
+          }
+      })
+  }
+</script>
+</body>
+</html>

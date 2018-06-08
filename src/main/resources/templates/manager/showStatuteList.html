@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>法条列表</title>
+
+    <link th:href="@{~/css/bootstrap.min.css}" type="text/css" rel="stylesheet"/>
+    <link th:href="@{~/css/fixed-footer.css}" type="text/css" rel="stylesheet"/>
+
+    <script th:src="@{~/js/html5shiv.min.js}"></script>
+    <script th:src="@{~/js/respond.min.js}"></script>
+    <script th:src="@{~/js/jquery.js}"></script>
+    <script th:src="@{~/js/bootstrap.min.js}"></script>
+
+</head>
+<body>
+<div th:replace="common/nav :: nav"></div>
+<div class="container" style="text-align: center;">
+    <div>
+        <h1>选择法条导出结果</h1>
+
+        <div style="margin-left: 10%;margin-right: 10%;padding-top: 3%">
+            <table style="width: 100%" border="1">
+                <thead style="font-size: 20px">
+                <tr>
+                    <th style="text-align: center">法条编码</th>
+                    <th style="text-align: center">法条名称</th>
+                    <th style="text-align: center">预览结果</th>
+                </tr>
+                </thead>
+                <tbody style="font-size: 17px">
+                <tr th:each="prod : ${allStatutes}">
+                    <td WIDTH="200" th:text="${prod.statuteid}">id</td>
+                    <td th:text="${prod.name}" th:title="${prod.text}">name</td>
+                    <td WIDTH="200"><a th:href="@{'/export/facts?sid='+${prod.statuteid}}">预览</a></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div th:replace="common/footer :: footer"></div>
+</body>
+</html>
