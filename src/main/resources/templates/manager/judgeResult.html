@@ -16,7 +16,7 @@
 <body>
 <div th:replace="common/nav :: nav"></div>
 <div class="container" style="text-align: center;">
-    <div>
+    <div >
         <h2>判断结果</h2>
         <div style="margin-left: 10%;margin-right: 10%;padding-top: 3%">
             <table style="width: 100%" class="table">
@@ -34,6 +34,7 @@
                 </tbody>
             </table>
         </div>
+        <div style="margin: 10px auto;font-size: 17px" th:with="pid=${#httpServletRequest.getParameter('projectId')}"><a th:href="@{'/export?pid='+${pid}}">根据法条导出结果</a></div>
     </div>
 </div>
 
