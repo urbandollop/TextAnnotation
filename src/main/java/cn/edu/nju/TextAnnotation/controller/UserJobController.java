@@ -52,8 +52,11 @@ public class UserJobController {
     public ModelAndView showJudgementList(@RequestParam(value = "pid", required = true) Integer pid) {
         ModelAndView modelAndView = new ModelAndView("/user/instrumentList");
         User currentUser = userService.getCurrentUser();
-        List<InstrumentVO> instrumentVOS = instrumentManagementService.userAllInstruments(currentUser.getUser_id(), pid);
+//        List<InstrumentVO> instrumentVOS = instrumentManagementService.userAllInstruments(currentUser.getUser_id(), pid);
+        List<InstrumentVO> instrumentVOS = instrumentManagementService.userAllInstumentsWithNoJudge(currentUser.getUser_id(), pid);
+        List<InstrumentVO> instrumentVOS2 = instrumentManagementService.userAllInstumentsWithJudge(currentUser.getUser_id(), pid);
         modelAndView.addObject("allInstuments", instrumentVOS);
+        modelAndView.addObject("allInstuments2", instrumentVOS2);
         return modelAndView;
     }
 

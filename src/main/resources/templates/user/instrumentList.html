@@ -22,6 +22,7 @@
         <h1 th:text="${pname}">项目名称</h1>
 
         <div style="margin-left: 10%;margin-right: 10%;padding-top: 3%">
+            <h2 >未标注文书列表</h2>
             <table style="width: 100%" border="1">
                 <thead style="font-size: 20px">
                 <tr>
@@ -34,6 +35,25 @@
                     <td>
                         <a th:href="@{'/judge/judgeAnnotation?pid='+${pid}+'&iid='+${prod.instrumentid}+'&xml='+${prod.xml}}" th:text="${prod.xml}">xml</a></td>
                     <td th:text="${prod.num}">num</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div style="margin-left: 10%;margin-right: 10%;padding-top: 3%">
+            <h2 >已标注文书列表</h2>
+            <table style="width: 100%" border="1">
+                <thead style="font-size: 20px">
+                <tr>
+                    <th style="text-align: center">文书名称</th>
+                    <th style="text-align: center">文书序号</th>
+                </tr>
+                </thead>
+                <tbody style="font-size: 17px" th:with="pid=${#httpServletRequest.getParameter('pid')}">
+                <tr th:each="prod2 : ${allInstuments2}">
+                    <td>
+                        <a th:href="@{'/judge/judgeAnnotation?pid='+${pid}+'&iid='+${prod2.instrumentid}+'&xml='+${prod2.xml}}" th:text="${prod2.xml}">xml</a></td>
+                    <td th:text="${prod2.num}">num</td>
                 </tr>
                 </tbody>
             </table>
