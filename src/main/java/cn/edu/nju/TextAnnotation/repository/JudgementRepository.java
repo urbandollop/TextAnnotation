@@ -16,4 +16,6 @@ public interface JudgementRepository extends JpaRepository<Judgement,Integer> {
     List<JudgementDto> findJudgementDto(@Param("projectid") Integer projectid,@Param("isrelated") Integer isrelated);
 
     Judgement findFirstByUserIdAndFactIdAndStatuteIdAndProjectId(Integer userid,Integer factid,String statuteid,Integer projectid);
+
+    Judgement findFirstByUserIdAndFactIdAndProjectId(Integer userid,Integer factid,Integer projectid);
 }

@@ -34,8 +34,15 @@ public class JudgeResultServiceImpl implements JudgeResultService {
     @Override
     public String saveJudgement(Judgement j) {
         Judgement judgement = judgementRepository.findFirstByUserIdAndFactIdAndStatuteIdAndProjectId(j.getUserId(),j.getFactId(),j.getStatuteId(),j.getProjectId());
-        judgement.setIsrelated(j.getIsrelated());
-        judgementRepository.save(judgement);
-        return "保存jid="+judgement.getJudgement_id()+",成功!";
+      if(judgement == null)
+      {
+          judgementRepository.save(j);
+          return "分配成功";
+      }
+      else {
+          judgement.setIsrelated(j.getIsrelated());
+          judgementRepository.save(judgement);
+          return "标注jid=" + judgement.getJudgement_id() + ",成功!";
+      }
     }
 }
