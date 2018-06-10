@@ -54,12 +54,39 @@
                         </td>
                     </tr>
                 </table>
-                    <button   class="btn-default"  th:onclick="'javascript:annotationSubmit()'">提交预览
-                    </button>
-
+                    <button class="btn-default"  th:onclick="'javascript:annotationSubmit()'">提交</button>
         </div>
     </div>
 </div>
+
+<!--<button class="btn-sm" style="margin-top: 1%" data-toggle="modal" data-target="#newProjectModal">创建新项目</button>-->
+<!-- Modal -->
+<div class="modal fade" id="newProjectModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                <h4 class="modal-title" id="newProjectModalLabel">标注情况</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label id="successmsg" class="control-label">标注成功信息</label>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer" >
+                <button id="btnNext" type="button" class="btn btn-primary"  th:onclick="'javascript:goToNext()'">下一篇</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">留在本页</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
 <footer class="panel-footer">
     <div th:replace="common/footer :: footer"></div>
 </footer>
@@ -67,7 +94,6 @@
 
 <script th:inline="javascript">
   function annotationSubmit() {
-
       var judgementList=new Array()
       var pidlabel = document.getElementById('pidlabel')
       var pidtext = pidlabel.innerText
@@ -95,7 +121,7 @@
 
                   judgementList.push({ factid:factid,isrelated:isrelated,factid:factid,statuteid:statuteid,projectid:projectid})
               }
-      }
+          }
 
       $.ajax({
           url:'/judge/annotationSubmit.action',
@@ -105,12 +131,31 @@
           data: JSON.stringify(judgementList),
           success: function (data) {
               if(data.resultCode === 'error'){
-                  toastr.warning(data.resultMessage)
+                  $("#successmsg").text(data.resultMessage)
+//                  toastr.warning(data.resultMessage)
+                  $("#newProjectModal").modal('show')
               }else {
-                  window.location.href('/login')
+                  $("#successmsg").text("发生问题，请重新标注")
+                  $("#newProjectModal").modal('show')
               }
           }
       })
+  }
+
+  function goToNext() {
+      var iid=[[${#httpServletRequest.getParameter('iid')}]]
+      var pid=[[${#httpServletRequest.getParameter('pid')}]]
+      var iidnext = [[${instumentNext.getInstrumentid()}]]
+      var xml = [[${instumentNext.getXml()}]]
+      if(iid == iidnext )
+      {
+          $("#successmsg").text("已经是最后一篇文书！2秒后返回首页")
+          setTimeout(function () {  window.location.href= '/user/index' },2000);
+      }
+      else {
+
+          window.location.href= '/judge/judgeAnnotation?pid=' + pid + '&iid=' + iidnext + '&xml=' + xml
+      }
   }
 </script>
 </body>

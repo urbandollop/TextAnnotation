@@ -3,10 +3,7 @@ package cn.edu.nju.TextAnnotation.controller;
 import cn.edu.nju.TextAnnotation.bean.*;
 import cn.edu.nju.TextAnnotation.model.Judgement;
 import cn.edu.nju.TextAnnotation.model.User;
-import cn.edu.nju.TextAnnotation.service.FactService;
-import cn.edu.nju.TextAnnotation.service.JudgeResultService;
-import cn.edu.nju.TextAnnotation.service.StatuteService;
-import cn.edu.nju.TextAnnotation.service.UserService;
+import cn.edu.nju.TextAnnotation.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,10 +32,17 @@ public class ShowAnnotationController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private ShowAnnotationService showAnnotationService;
+
     @RequestMapping(value = "/judgeAnnotation", method = RequestMethod.GET)
 
-    public String displayAnnotation(Model model,@RequestParam(value = "iid", required = true) String instrumentid) {
-
+    public String displayAnnotation(Model model,@RequestParam(value = "iid", required = true) String instrumentid,@RequestParam(value = "pid", required = true) Integer projectid) {
+        User user = userService.getCurrentUser();
+        int uid =user.getUser_id();
+        InstrumentVO instrumentVO = showAnnotationService.getNextInstrument(instrumentid,uid,projectid);
+        model.addAttribute("instumentNext",instrumentVO);
+//        instrumentVO.getInstrumentid()instrumentVO.getNum()
 //        List<FactListBean> factListBeans=factService.getAllFactByInstrumentId(instrumentid);
         ListBean listBean = factService.getAllFactByInstrumentID(instrumentid);
         model.addAttribute("listBean", listBean);
@@ -64,7 +68,7 @@ public class ShowAnnotationController {
                 judgement.setProjectId(judgementListBeans.get(i).getProjectid());
                  msg +=  judgeResultService.saveJudgement(judgement);
             }
-            return  new ResultMessageBean(ResultMessageBean.ERROR, msg);
+            return  new ResultMessageBean(ResultMessageBean.ERROR, "提交成功");
         }
         else{
             return  new ResultMessageBean(ResultMessageBean.ERROR, "提交失败");

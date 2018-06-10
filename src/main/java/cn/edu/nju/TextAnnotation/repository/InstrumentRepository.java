@@ -11,4 +11,6 @@ public interface InstrumentRepository extends JpaRepository<Instrument, String> 
     List<Instrument> findInstrumentsByNumBetween(Integer min, Integer max);
 
     Instrument findFirstByInstrumentid(String id);
+
+    Instrument findFirstByNum(Integer num);
 }
