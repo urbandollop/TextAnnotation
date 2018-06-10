@@ -26,11 +26,9 @@ public class DownloadExcelController {
     StatuteService statuteService;
 
     @RequestMapping(value = "",method = RequestMethod.GET)
-    public String showStatuteList(Model model){
+    public String showStatuteList(@RequestParam(value = "pid", required = true) Integer projectid,Model model){
 //        List<StatuteListBean> statuteListBeans = statuteService.getAllStatute();
-        int projectid = 12620;
-        List<StatuteListBean> statuteListBeans = excelService.getMostStatute(projectid,-1);
-
+        List<StatuteListBean> statuteListBeans = excelService.getMostStatute(projectid,1);
         model.addAttribute("allStatutes",statuteListBeans);
         return "/manager/showStatuteList";
     }
