@@ -26,7 +26,8 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand">文本标注</a>
+            <a class="navbar-brand" th:if="!${'admin'.equals(#httpServletRequest.remoteUser)}" th:href="@{/user/index}">法律文书标注</a>
+            <a class="navbar-brand" th:if="${'admin'.equals(#httpServletRequest.remoteUser)}" th:href="@{/manager/index}">法律文书标注</a>
         </div>
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -59,5 +60,6 @@
         </div>
     </div>
 </nav>
+
 </body>
 </html>
