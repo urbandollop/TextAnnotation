@@ -95,9 +95,6 @@ public class ProjectManagementServiceImpl implements ProjectManagementService {
             if (!project.isPresent()) {
                 return new ResultMessageBean(ResultMessageBean.ERROR, "不存在该项目");
             }
-            Project proget = project.get();
-            proget.setAllocated(true);
-            projectRepository.save(proget);
             for (TaskAllocationBean t : allocationBeans) {
                 if (t.isAllocated) {
                     task = new Task();
@@ -129,6 +126,9 @@ public class ProjectManagementServiceImpl implements ProjectManagementService {
                     }
                 }
             }
+            Project proget = project.get();
+            proget.setAllocated(true);
+            projectRepository.save(proget);
             return new ResultMessageBean(ResultMessageBean.SUCCESS);
         } catch (Exception e) {
             return new ResultMessageBean(ResultMessageBean.ERROR, "任务分配失败");
