@@ -149,8 +149,8 @@
       var xml = [[${instumentNext.getXml()}]]
       if(iid == iidnext )
       {
-          $("#successmsg").text("已经是最后一篇文书！2秒后返回首页")
-          setTimeout(function () {  window.location.href= '/user/index' },2000);
+          $("#successmsg").text("已经是最后一篇文书！2秒后返回列表页")
+          setTimeout(function () {  window.location.href= '/user/judgementList?pid='+ pid },2000);
       }
       else {
 

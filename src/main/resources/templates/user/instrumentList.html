@@ -18,8 +18,8 @@
 <body>
 <div th:replace="common/nav :: nav"></div>
 <div class="container" style="text-align: center;">
-    <div th:with="pname=${#httpServletRequest.getParameter('pname')}">
-        <h1 th:text="${pname}">项目名称</h1>
+    <div>
+        <h1 th:text="${projectvo.name}">项目名称</h1>
 
         <div style="margin-left: 10%;margin-right: 10%;padding-top: 3%">
             <h2 >未标注文书列表</h2>
