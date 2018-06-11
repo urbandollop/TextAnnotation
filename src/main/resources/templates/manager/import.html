@@ -63,14 +63,14 @@
             processData: false,
             contentType: false,
             cache: false,
-            timeout: 600000,
+            timeout: 0,
             dataType: 'text',
             success: function (data) {
                 msg.html(data)
                 $("#buttonImport").removeAttr("disabled")
             },
             error:function (data){
-                msg.html("发生错误！")
+                msg.html("ajax发生错误！")
                 $("#buttonImport").removeAttr("disabled")
             }
         })

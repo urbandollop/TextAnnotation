@@ -89,8 +89,7 @@ public class ExcelServiceImpl implements ExcelService {
                             wb = new HSSFWorkbook(is);
                         }
                         //根据excel里面的内容读取知识库信息
-                        message += saveIntoInstrumentAndStatute(wb,fileName);
-                        message += saveIntoInstrumentAndStatuteAndFact(wb,fileName);
+                        message += saveIntoDatabase(wb,fileName);
                     }catch(Exception e){
 //            try {
 //                File f = new File("C:\\Users\\czh\\Desktop\\log\\a.txt");
@@ -122,17 +121,17 @@ public class ExcelServiceImpl implements ExcelService {
         }
         return message;
     }
+
     /**
-     * 存文书表和法条表
+     * 存所有表格
      */
     @Override
-    public String saveIntoInstrumentAndStatute(Workbook wb,String fileName)
+    public String saveIntoDatabase(Workbook wb,String fileName)
     {
         //错误信息接收器
         String errorMsg = "";
         //成功条数计数
         int count=0;
-
         //存文书表
         Instrument instrument = readInstrument(fileName);
         count = saveInstrument(instrument,count);
@@ -151,6 +150,7 @@ public class ExcelServiceImpl implements ExcelService {
             if (totalRows >= 2 && sheet.getRow(0) != null) {
                 Row row = sheet.getRow(0);
                 count = 0;
+                int count2 = 0;
                 for (int colNum = 1; colNum <= totalCells; colNum++) {
                     if (row.getCell(colNum) != null) {
                         Statute statute = new Statute();
@@ -160,50 +160,17 @@ public class ExcelServiceImpl implements ExcelService {
                         statute.setText(text.getStringCellValue());//获得法条内容
                         //存法条表
                         count = saveStatuteWithLaw1Article(statute, count);
-                    }
-                }
-                errorMsg += "存法条表" + count + "条;";
-            }
-        }
-        return errorMsg;
-    }
-    /**
-     * 存文书-法条表和事实表
-     */
-    @Override
-    public String saveIntoInstrumentAndStatuteAndFact(Workbook wb,String fileName){
-        //错误信息接收器
-        String errorMsg = "";
-        //成功条数计数
-        int count=0;
-        //存文书表
-        Instrument instrument = readInstrument(fileName);
-        //得到第一个shell
-        Sheet sheet=wb.getSheetAt(0);
-        //得到Excel的行数
-        int totalRows=sheet.getPhysicalNumberOfRows();
-        //总列数
-        int totalCells = 0;
-        //得到Excel的列数(前提是有行数)，从第二行算起
-        if(totalRows>=2 && sheet.getRow(0) != null){
-            totalCells=sheet.getRow(0).getPhysicalNumberOfCells();
-        }
-        if (sheet != null) {
-            if (totalRows>=2 && sheet.getRow(0) != null) {
-                Row row = sheet.getRow(0);
-                count =0;
-                for(int colNum = 1; colNum <= totalCells; colNum++) {
-                    if(row.getCell(colNum) != null) {
+
                         InstrumentAndStatute instrumentAndStatute = new InstrumentAndStatute();
-                        Cell text = row.getCell(colNum);
-                        String name = getStatute_name(text.getStringCellValue());
                         instrumentAndStatute.setInstrumentid(instrument.getInstrumentid());//获得文书id
                         instrumentAndStatute.setNum(colNum);//获得法条在文书中顺序
                         //存文书-法条表
-                        count = saveInstrumentAndStatute(instrumentAndStatute,name,count);
+                        count2 = saveInstrumentAndStatute(instrumentAndStatute,name,count2);
                     }
                 }
-                errorMsg += "存文书-法条表"+count+"条;";
+                errorMsg += "存法条表" + count + "条;";
+                errorMsg += "存文书-法条表"+count2+"条;";
+            }
 
                 count =0;
                 for(int rowNum = 1; rowNum <= totalRows; rowNum++) {
@@ -221,29 +188,16 @@ public class ExcelServiceImpl implements ExcelService {
                     }
                 }
                 errorMsg += "存事实表"+count+"条";
-            }
+
         }
         return errorMsg;
     }
+
     @Override
     public Integer saveStatuteWithLaw1Article(Statute statute,Integer count){
         String name = statute.getName();
         String docName = name.substring(0,name.indexOf("(")).trim();
         String articleSeq = name.substring(name.indexOf(")")+1,name.length()).trim();
-//        Class tClass = law1ArticleRepository.getClass();
-//        Method[] methods = tClass.getMethods();
-//        Boolean has_method = false;
-//        for (int i = 0; i < methods.length; i++) {
-//            System.out.println("public method: " + methods[i]);
-//            if (methods[i].getName().equals("findFirstByArticleSeqAndDocName")){
-//                i = i;
-//                has_method = true;
-//            }
-//        }
-//        if(!has_method){
-//            int i=0;
-//        }
-
         Law1Article law1Article = law1ArticleRepository.findFirstByArticleSeqEqualsAndDocNameEquals(articleSeq,docName);
         if(law1Article != null) {
             String id = law1Article.getCode();
@@ -270,14 +224,14 @@ public class ExcelServiceImpl implements ExcelService {
     @Override
     public Integer saveInstrumentAndStatute(InstrumentAndStatute instrumentAndStatute,String statute_name,Integer count){
         Statute statute =  statuteRepository.findFirstByName(statute_name);
-        instrumentAndStatute.setStatuteid(statute.getStatuteid());
-        InstrumentAndStatute instrumentAndStatute1=instrumentAndStatueRepository.findFirstByInstrumentidAndStatuteid(instrumentAndStatute.getInstrumentid(),instrumentAndStatute.getStatuteid());
-        if(instrumentAndStatute1 == null)
-        {
-            instrumentAndStatueRepository.save(instrumentAndStatute);
-            count += 1;
-        }
-        return count;
+        if(statute != null) {
+            instrumentAndStatute.setStatuteid(statute.getStatuteid());
+            InstrumentAndStatute instrumentAndStatute1 = instrumentAndStatueRepository.findFirstByInstrumentidAndStatuteid(instrumentAndStatute.getInstrumentid(), instrumentAndStatute.getStatuteid());
+            if (instrumentAndStatute1 == null) {
+                instrumentAndStatueRepository.save(instrumentAndStatute);
+                count += 1;
+            }
+        }return count;
     }
     @Override
     public Integer saveFact(Fact fact,Integer count)

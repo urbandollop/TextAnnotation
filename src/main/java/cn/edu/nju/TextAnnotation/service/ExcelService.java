@@ -28,8 +28,8 @@ public interface ExcelService {
 
   public List<StatuteListBean> getMostStatute(Integer projectid,Integer isrelated);
 
-  public String saveIntoInstrumentAndStatute(Workbook wb,String fileName);
-  public String saveIntoInstrumentAndStatuteAndFact(Workbook wb, String fileName);
+  public String saveIntoDatabase(Workbook wb,String fileName);
+
   public Integer saveFact(Fact fact, Integer count);
   public Integer saveInstrumentAndStatute(InstrumentAndStatute instrumentAndStatute, String statute_name, Integer count);
   public Integer saveInstrument(Instrument instrument, Integer count);
