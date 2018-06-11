@@ -23,13 +23,15 @@
                 <thead style="font-size: 20px">
                 <tr>
                     <th style="text-align: center">用户ID</th>
+                    <th style="text-align: center">用户名</th>
                     <th style="text-align: center">是否判断结束</th>
                 </tr>
                 </thead>
                 <tbody style="font-size: 17px">
                 <tr th:each="each : ${judRes}">
-                    <td th:text="${each.key}">name</td>
-                    <td th:text="${each.value}?'是':'否'">result</td>
+                    <td th:text="${each.userid}">id</td>
+                    <td th:text="${each.username}">name</td>
+                    <td th:text="${each.isFinished}?'是':'否'">result</td>
                 </tr>
                 </tbody>
             </table>
