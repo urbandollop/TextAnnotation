@@ -50,6 +50,9 @@ public class ShowAnnotationController {
         List<StatuteListBean> statuteListBeans=statuteService.getAllStatuteByStatuteid(instrumentid);
         model.addAttribute("statuteListBeans", statuteListBeans);
 
+        List<JudgementListBean> judgementListBeanList=showAnnotationService.getJudgementList(instrumentid,uid,projectid);
+        model.addAttribute("judgementListBeans", judgementListBeanList);
+
         return "/user/judgeAnnotation";
     }
     @PostMapping("/annotationSubmit.action")

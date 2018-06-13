@@ -93,7 +93,7 @@
 
 
 <script th:inline="javascript">
-  function annotationSubmit() {
+    function annotationSubmit() {
       var judgementList=new Array()
       var pidlabel = document.getElementById('pidlabel')
       var pidtext = pidlabel.innerText
@@ -157,6 +157,24 @@
           window.location.href= '/judge/judgeAnnotation?pid=' + pid + '&iid=' + iidnext + '&xml=' + xml
       }
   }
+
+    $(function(){//页面加载方法，给radio赋checked
+
+        var jList = new Array()
+        jList = [[ ${judgementListBeans}]]
+        jList.forEach(function(obj){
+            var isrelated = obj.isrelated
+            if(isrelated == 1){
+                var sid=obj.statuteid
+                var fid=obj.factid
+                var radioxgid='checkxg'+ fid + sid
+                var radiobxgid='checkbxg'+ fid + sid
+//                $("[id='"+sss+"']")
+                $("[id='"+radioxgid+"']").attr("checked","checked");
+                $("[id='"+radiobxgid+"']").attr("checked",false);
+            }
+        })
+    })
 </script>
 </body>
 </html>
