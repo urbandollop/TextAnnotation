@@ -16,4 +16,9 @@ public class UserBean {
         this.userId=user.getUser_id();
         this.username=user.getName();
     }
+
+    public UserBean(Integer userId, String username) {
+        this.userId = userId;
+        this.username = username;
+    }
 }

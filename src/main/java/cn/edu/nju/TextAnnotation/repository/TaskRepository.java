@@ -8,5 +8,7 @@ import java.util.List;
 public interface TaskRepository extends CrudRepository<Task, Integer> {
     List<Task> findAllByUserid(Integer userid);
 
-    Task findFirstByUseridAndProjectid(Integer userid,Integer projectid);
+    Task findFirstByUseridAndProjectid(Integer userid, Integer projectid);
+
+    List<Task> findAllByProjectid(Integer projectId);
 }

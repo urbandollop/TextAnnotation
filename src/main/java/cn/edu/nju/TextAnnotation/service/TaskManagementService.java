@@ -1,7 +1,6 @@
 package cn.edu.nju.TextAnnotation.service;
 
 import cn.edu.nju.TextAnnotation.model.Task;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 

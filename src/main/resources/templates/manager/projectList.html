@@ -41,6 +41,7 @@
                     <td th:text="${prod.starttime}">time</td>
                     <td>
                         <a class="btn-sm" th:href="@{'/manager/result?projectId='+${prod.project_id}}" th:if="${prod.allocated}">查看任务分配</a>
+                        <a class="btn-sm" th:href="@{'/manager/modifyAllocate?projectId='+${prod.project_id}}" th:if="${prod.allocated}">修改任务分配</a>
                         <a class="btn-sm btn-info" th:href="@{'/manager/allocate?projectId='+${prod.project_id}}"
                            th:unless="${prod.allocated}">进行任务分配</a>
                     </td>

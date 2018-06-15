@@ -1,12 +1,10 @@
 package cn.edu.nju.TextAnnotation.service.serviceImpl;
 
 import cn.edu.nju.TextAnnotation.bean.*;
-import cn.edu.nju.TextAnnotation.model.Instrument;
-import cn.edu.nju.TextAnnotation.model.Judgement;
-import cn.edu.nju.TextAnnotation.model.Project;
-import cn.edu.nju.TextAnnotation.model.Task;
+import cn.edu.nju.TextAnnotation.model.*;
 import cn.edu.nju.TextAnnotation.repository.InstrumentRepository;
 import cn.edu.nju.TextAnnotation.repository.ProjectRepository;
+import cn.edu.nju.TextAnnotation.repository.TaskRepository;
 import cn.edu.nju.TextAnnotation.repository.UserRepository;
 import cn.edu.nju.TextAnnotation.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +24,15 @@ public class ProjectManagementServiceImpl implements ProjectManagementService {
     @Autowired
     InstrumentRepository instrumentRepository;
     @Autowired
+    TaskRepository taskRepository;
+    @Autowired
     FactService factService;
     @Autowired
     StatuteService statuteService;
     @Autowired
     JudgeResultService judgeResultService;
+    @Autowired
+    UserService userService;
 
     @Override
     public List<ProjectVO> userAllProjects(int userid) {
@@ -133,5 +135,37 @@ public class ProjectManagementServiceImpl implements ProjectManagementService {
         } catch (Exception e) {
             return new ResultMessageBean(ResultMessageBean.ERROR, "任务分配失败");
         }
+    }
+
+    /**
+     * 获得项目目前的分配情况（修改分配时要显示已分配的情况和未分配的用户信息）
+     * key: True 已分配 False 未分配
+     *
+     * @param projectId
+     * @return
+     */
+    @Override
+    public Map<Boolean, List<UserBean>> getUserTaskAllocationInfo(Integer projectId) {
+        List<UserBean> allUsers = userService.getAllNormalUsers();
+        List<Task> tasks = taskRepository.findAllByProjectid(projectId);
+
+        List<UserBean> allocatedUsers = new ArrayList<>();
+        List<UserBean> unallocatedUsers = new ArrayList<>();
+
+        for (UserBean user : allUsers) {
+            Optional<Task> task = tasks.stream().filter(t -> t.getUserid().equals(user.userId)).findFirst();
+            if (!task.isPresent()) {
+                unallocatedUsers.add(user);
+            } else {
+                Task t = task.get();
+                TaskAllocationUserBean taskAllocationUserBean = new TaskAllocationUserBean(user.userId, user.username, t.getBegin(), t.getEnd());
+                allocatedUsers.add(taskAllocationUserBean);
+            }
+        }
+
+        Map<Boolean, List<UserBean>> res = new HashMap<>();
+        res.put(true, allocatedUsers);
+        res.put(false, unallocatedUsers);
+        return res;
     }
 }

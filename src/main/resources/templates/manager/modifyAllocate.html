@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>任务分配修改</title>
+
+    <link th:href="@{~/css/bootstrap.min.css}" type="text/css" rel="stylesheet"/>
+    <link th:href="@{~/css/fixed-footer.css}" type="text/css" rel="stylesheet"/>
+    <link th:href="@{~/css/toastr.css}" type="text/css" rel="stylesheet">
+
+    <link th:href="@{~/css/loaders.css}" type="text/css" rel="stylesheet"/>
+
+
+    <script th:src="@{~/js/html5shiv.min.js}"></script>
+    <script th:src="@{~/js/respond.min.js}"></script>
+    <script th:src="@{~/js/jquery.js}"></script>
+    <script th:src="@{~/js/bootstrap.min.js}"></script>
+    <script th:src="@{~/js/toastr.min.js}"></script>
+</head>
+<body>
+<div th:replace="common/nav :: nav"></div>
+
+<div class="container" style="text-align: center;">
+    <div>
+        <h2>项目任务分配</h2>
+        <h4>项目名:&nbsp;&nbsp;<span th:text="${project.name}">任务名称</span></h4>
+        <h4>创建于:&nbsp;&nbsp;<span th:text="${project.starttime}">创建时间</span></h4>
+
+        <div style="margin-left: 10%;margin-right: 10%;padding-top: 3%">
+            <table style="width: 100%" class="table" id="allocationTable">
+                <thead style="font-size: 20px">
+                <tr>
+                    <th style="text-align: center">用户名</th>
+                    <th style="text-align: center">是否参与项目</th>
+                    <th style="text-align: center">
+                        分配计划
+                    </th>
+                </tr>
+                </thead>
+                <tbody style="font-size: 17px">
+                <tr th:each="user:${unallocatedUsers}">
+                    <td style="text-align: center" th:text="${user.username}">
+                        用户1111
+                    </td>
+                    <td style="text-align: center">
+                        <input type="checkbox" name="check" th:id="'user'+${user.userId}">
+                    </td>
+                    <td style="text-align: center">
+                        <div class="form-inline" th:id="'tasks'+${user.userId}" style="display: none">
+                            <input type="text" class="form-control" th:id="'startUser'+${user.userId}"
+                                   placeholder="start" style="width: 20%">
+                            &nbsp;~&nbsp;
+                            <input type="text" class="form-control" th:id="'endUser'+${user.userId}"
+                                   placeholder="end" style="width: 20%">
+                        </div>
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <button class="btn-default" th:onclick="'javascript:submitAllocation('+${project.project_id}+')'">确认分配</button>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="loader">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-body" style="text-align: center">
+                <div class="loader">
+                    <div class="line-scale-pulse-out-rapid">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
+                <div>任务分配中...</div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<div th:replace="common/footer :: footer"></div>
+
+<script th:inline="javascript">
+    toastr.options = {
+        closeButton: false,
+        debug: false,
+        progressBar: true,
+        positionClass: "toast-top-center",
+        onclick: null,
+        showDuration: "300",
+        hideDuration: "1000",
+        timeOut: "3000",
+        extendedTimeOut: "1000",
+        showEasing: "swing",
+        hideEasing: "linear",
+        showMethod: "fadeIn",
+        hideMethod: "fadeOut"
+    };
+
+    $(function () {
+        var s = $("input[name='check']");
+        s.each(function (i) {
+            $(this).click(function () {
+                if (this.checked == true) {
+                    tasksId = "tasks" + this.id.split("user")[1]
+                    $("#" + tasksId).show()
+                } else if (this.checked == false) {
+                    tasksId = "tasks" + this.id.split("user")[1]
+                    startInputId = "startUser" + this.id.split("user")[1]
+                    endInputId = "endUser" + this.id.split("user")[1]
+                    $("#" + tasksId).hide()
+                    $("#" + startInputId).val("")
+                    $("#" + endInputId).val("")
+                }
+            });
+        });
+    })
+
+    function submitAllocation(projectId) {
+        var table = document.getElementById('allocationTable')
+        var infoList = new Array()
+
+        for (var i = 1; i < table.rows.length; i++) {
+            var check = table.rows[i].cells[1].getElementsByTagName('input')[0].checked
+            var start = table.rows[i].cells[2].getElementsByTagName('input')[0].value
+            var end = table.rows[i].cells[2].getElementsByTagName('input')[1].value
+            var userId = table.rows[i].cells[1].getElementsByTagName('input')[0].id.split('user')[1]
+
+            infoList.push({projectId: projectId, userId: userId, isAllocated: check, startNo: start, endNo: end})
+        }
+
+        $.ajax({
+            url: '/manager/allocate.action',
+            type: 'POST',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: JSON.stringify(infoList),
+            beforeSend: function () {
+                $("#loader").modal('show')
+            },
+            success: function (data) {
+                if (data.resultCode === 'error') {
+                    toastr.warning(data.resultMessage)
+                } else {
+                    window.location.href = '/manager/index'
+                }
+            },
+            complete: function () {
+                $("#loader").modal('hide')
+            }
+        })
+    }
+
+
+</script>
+</body>
+</html>

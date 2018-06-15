@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author keenan on 2018/5/29
@@ -54,6 +55,17 @@ public class ManagerController {
         // TODO 填上资源地址
         ModelAndView modelAndView = new ModelAndView("/manager/users");
         modelAndView.addObject("users", userService.getAllNormalUsers());
+        return modelAndView;
+    }
+
+    @GetMapping("/manager/modifyAllocate")
+    public ModelAndView showModifyAllocate(@RequestParam(value = "projectId", required = true) Integer projectId) {
+        ModelAndView modelAndView = new ModelAndView("manager/modifyAllocate");
+        Map<Boolean, List<UserBean>> userInfo = projectManagementService.getUserTaskAllocationInfo(projectId);
+        ProjectVO projectVO = projectManagementService.findProjectByProjectId(projectId);
+        modelAndView.addObject("project", projectVO);
+        modelAndView.addObject("allocatedUsers", userInfo.get(true));
+        modelAndView.addObject("unallocatedUsers", userInfo.get(false));
         return modelAndView;
     }
 
