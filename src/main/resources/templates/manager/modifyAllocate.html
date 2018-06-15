@@ -26,11 +26,29 @@
     <div>
         <h2>项目任务分配</h2>
         <h4>项目名:&nbsp;&nbsp;<span th:text="${project.name}">任务名称</span></h4>
-        <h4>创建于:&nbsp;&nbsp;<span th:text="${project.starttime}">创建时间</span></h4>
+        <h4 style="margin-bottom:4%">创建于:&nbsp;&nbsp;<span th:text="${project.starttime}">创建时间</span></h4>
 
-        <div style="margin-left: 10%;margin-right: 10%;padding-top: 3%">
+        <div style="margin-left: 10%;margin-right: 10%;margin-bottom: 10%">
+            <h3>已分配人员</h3>
+            <table style="width: 100%;margin-bottom:5%" class="table" id="haveAllocatedUsersTable">
+                <thead style="font-size: 18px">
+                <tr>
+                    <th style="text-align: center">用户名</th>
+                    <th style="text-align: center">开始位置</th>
+                    <th style="text-align: center">结束位置</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="user:${allocatedUsers}">
+                    <td style="text-align: center" th:text="${user.username}"></td>
+                    <td style="text-align: center" th:text="${user.startNo}"></td>
+                    <td style="text-align: center" th:text="${user.endNo}"></td>
+                </tr>
+                </tbody>
+            </table>
+            <h3>待分配人员</h3>
             <table style="width: 100%" class="table" id="allocationTable">
-                <thead style="font-size: 20px">
+                <thead style="font-size: 18px">
                 <tr>
                     <th style="text-align: center">用户名</th>
                     <th style="text-align: center">是否参与项目</th>
@@ -57,12 +75,11 @@
                         </div>
                     </td>
                 </tr>
-
                 </tbody>
             </table>
+            <button class="btn-default" th:onclick="'javascript:submitAllocation('+${project.project_id}+')'">确认分配</button>
         </div>
     </div>
-    <button class="btn-default" th:onclick="'javascript:submitAllocation('+${project.project_id}+')'">确认分配</button>
 </div>
 
 <div class="modal fade" tabindex="-1" role="dialog" id="loader">
