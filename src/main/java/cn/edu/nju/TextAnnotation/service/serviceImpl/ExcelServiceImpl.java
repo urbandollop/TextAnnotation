@@ -299,8 +299,8 @@ public class ExcelServiceImpl implements ExcelService {
     }
 
     @Override
-    public List<FactListBean> getAllFromFactWhereStatuteId(String sid){
-        List<Judgement> judgements=judgementRepository.findAllByStatuteIdAndIsrelated(sid,1);
+    public List<FactListBean> getAllFromFactWhereStatuteId(String sid,Integer pid){
+        List<Judgement> judgements=judgementRepository.findAllByStatuteIdAndIsrelatedAndProjectId(sid,1,pid);
         List<FactListBean> factListBeans=new ArrayList<>();
         for(int i =0;i<judgements.size();i++)
         {

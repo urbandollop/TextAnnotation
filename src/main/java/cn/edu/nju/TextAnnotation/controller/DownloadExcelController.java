@@ -34,19 +34,21 @@ public class DownloadExcelController {
     }
 
     @RequestMapping(value = "/facts",method = RequestMethod.GET)
-    public String showExport(Model model, @RequestParam(value = "sid", required = true) String sid,HttpSession session){
+    public String showExport(Model model, @RequestParam(value = "sid", required = true) String sid,@RequestParam(value = "pid", required = true) Integer pid,HttpSession session){
         StatuteListBean statuteListBean = statuteService.getOneById(sid);
         String sname = statuteListBean.getName();
         session.setAttribute("sname",sname);
         session.setAttribute("sid",sid);
-        List<FactListBean> factListBeans = excelService.getAllFromFactWhereStatuteId(sid);
+        session.setAttribute("pid",pid);
+        List<FactListBean> factListBeans = excelService.getAllFromFactWhereStatuteId(sid,pid);
         model.addAttribute("allFacts",factListBeans);
         return "/manager/export";
     }
     @PostMapping(value = "/download.action")
     public  String  downloadExcel(HttpSession session,HttpServletResponse response)  {
         String sid = session.getAttribute("sid").toString();
-        List<FactListBean> factListBeans = excelService.getAllFromFactWhereStatuteId(sid);
+        Integer pid = Integer.parseInt(session.getAttribute("pid").toString());
+        List<FactListBean> factListBeans = excelService.getAllFromFactWhereStatuteId(sid,pid);
         StatuteListBean statuteListBean = statuteService.getOneById(sid);
         String sname = statuteListBean.getName();
         try {

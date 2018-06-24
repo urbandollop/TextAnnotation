@@ -10,6 +10,7 @@ import java.util.List;
 
 public interface JudgementRepository extends JpaRepository<Judgement,Integer> {
     List<Judgement> findAllByStatuteIdAndIsrelated(String statuteid, Integer isrelated);
+    List<Judgement> findAllByStatuteIdAndIsrelatedAndProjectId(String statuteid, Integer isrelated,Integer projectid);
     List<Judgement> findAllByProjectId(Integer projectId);
 
     @Query(value = "select new cn.edu.nju.TextAnnotation.bean.JudgementDto(count(j.statuteId),j.statuteId) from Judgement j where j.projectId = :projectid and j.isrelated = :isrelated group by j.statuteId order by count(j.statuteId) desc ")

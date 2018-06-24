@@ -22,7 +22,7 @@ public interface ExcelService {
 
   public String batchImport(List<MultipartFile> files);
 
-  public List<FactListBean> getAllFromFactWhereStatuteId(String statuteid);
+  public List<FactListBean> getAllFromFactWhereStatuteId(String statuteid,Integer pid);
 
   public  void downloadExportExcel(HttpServletResponse response, String statuteName, List<FactListBean> data) throws Exception;
 
