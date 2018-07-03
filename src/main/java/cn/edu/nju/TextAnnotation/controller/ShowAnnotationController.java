@@ -35,6 +35,9 @@ public class ShowAnnotationController {
     @Autowired
     private ShowAnnotationService showAnnotationService;
 
+    @Autowired
+    ProjectManagementService projectManagementService;
+
     @RequestMapping(value = "/judgeAnnotation", method = RequestMethod.GET)
 
     public String displayAnnotation(Model model,@RequestParam(value = "iid", required = true) String instrumentid,@RequestParam(value = "pid", required = true) Integer projectid) {
@@ -52,6 +55,12 @@ public class ShowAnnotationController {
 
         List<JudgementListBean> judgementListBeanList=showAnnotationService.getJudgementList(instrumentid,uid,projectid);
         model.addAttribute("judgementListBeans", judgementListBeanList);
+
+        ProjectVO projectVO = projectManagementService.findProjectByProjectId(projectid);
+        model.addAttribute("projectvo", projectVO);
+
+        InstrumentVO instrumentVO2 = showAnnotationService.getThisInstrument(instrumentid);
+        model.addAttribute("instumentThis",instrumentVO2);
 
         return "/user/judgeAnnotation";
     }

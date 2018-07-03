@@ -15,4 +15,6 @@ public interface ShowAnnotationService {
    public InstrumentVO getNextInstrument(String instrumentid, Integer userid, Integer projectid);
 
    public List<JudgementListBean> getJudgementList(String instrumentid, Integer userid, Integer projectid);
+
+   public InstrumentVO getThisInstrument(String instrumentid);
 }

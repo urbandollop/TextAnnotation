@@ -17,8 +17,13 @@
 </head>
 <body>
 <div th:replace="common/nav :: nav"></div>
-<div class="container" style="text-align: center;">
-    <div th:with="xml=${#httpServletRequest.getParameter('xml')}">
+<div class="container-fluid" style="text-align: center;">
+    <div style="margin-left: 10%;margin-right: 10%;margin-top: 10px; margin-bottom: 10px;text-align: left;font-size: 18px;">
+        <a th:href="@{'/user/judgementList?pid='+${projectvo.project_id}}" th:text="${projectvo.name}">项目名称</a>
+        <label style="margin-left: 5px;margin-right: 5px">>></label>
+        <label  th:text="${instumentThis.xml}+'（序号：'+${instumentThis.num}+'）'">文书序号</label>
+    </div>
+    <div style="margin-left: 10%;margin-right: 10%;" th:with="xml=${#httpServletRequest.getParameter('xml')}">
         <h1 th:text="${xml}">文书名称</h1>
         <div  th:with="pid=${#httpServletRequest.getParameter('pid')}">
          <label id="pidlabel" style="display: none" th:text="${pid}"></label>
@@ -26,7 +31,7 @@
                 <table style="margin-top: 30px;"  th:each="factListBeans,factListBeansStat: ${listBean.list}" th:id="'annotationtable'+${factListBeansStat.index}" border="0" >
                     <tr>
                         <label id="fsizelabel" style="display: none" th:text="${factListBeansStat.size}"></label>
-                        <td  style="font-size: 17px;" th:text="'事实'+${factListBeans.num}+'：'+${factListBeans.text}" th:id="'factBean'+${factListBeans.factid}">
+                        <td  style="font-size: 20px; font-weight:bold;text-align: left;padding-bottom: 5px;" th:text="'事实'+${factListBeans.num}+'：'+${factListBeans.text}" th:id="'factBean'+${factListBeans.factid}">
                     </td>
                     </tr>
                     <tr>
@@ -54,7 +59,7 @@
                         </td>
                     </tr>
                 </table>
-                    <button class="btn-default"  th:onclick="'javascript:annotationSubmit()'">提交</button>
+                    <button style="margin-top: 20px;" class="btn-primary"  th:onclick="'javascript:annotationSubmit()'">提交</button>
         </div>
     </div>
 </div>

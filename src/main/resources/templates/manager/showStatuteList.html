@@ -17,7 +17,7 @@
 </head>
 <body>
 <div th:replace="common/nav :: nav"></div>
-<div class="container" style="text-align: center;">
+<div class="container-fluid" style="text-align: center;">
     <div>
         <h1>选择法条导出结果</h1>
 
@@ -30,11 +30,11 @@
                     <th style="text-align: center">预览结果</th>
                 </tr>
                 </thead>
-                <tbody style="font-size: 17px">
+                <tbody style="font-size: 17px" th:with="pid=${#httpServletRequest.getParameter('pid')}">
                 <tr th:each="prod : ${allStatutes}">
                     <td WIDTH="200" th:text="${prod.statuteid}">id</td>
                     <td th:text="${prod.name}" th:title="${prod.text}">name</td>
-                    <td WIDTH="200"><a th:href="@{'/export/facts?sid='+${prod.statuteid}}">预览</a></td>
+                    <td WIDTH="200"><a th:href="@{'/export/facts?sid='+${prod.statuteid}+'&pid='+${pid}}">预览</a></td>
                 </tr>
                 </tbody>
             </table>

@@ -45,6 +45,13 @@ public class ShowAnnotationServiceImpl implements ShowAnnotationService {
     }
 
     @Override
+    public InstrumentVO getThisInstrument(String instrumentid){
+        Instrument Instrument=instrumentRepository.findFirstByInstrumentid(instrumentid);
+        InstrumentVO instrumentVO=new InstrumentVO(Instrument);
+        return instrumentVO;
+    }
+
+    @Override
     public List<JudgementListBean> getJudgementList(String instrumentid, Integer userid, Integer projectid){
         List<JudgementListBean> judgementListBeanList=new ArrayList<>();
         List<Fact> factList =factRepository.findByInstrumentid(instrumentid);
